@@ -13,8 +13,8 @@ This repository is the ENCORE site (VitePress, `docs/`), its technical guides (`
    a game. "Bring your own copy" is the wording.
 4. Skills follow the Agent Skills format: `skills/<name>/SKILL.md` with `name` equal to the directory name and a
    `description` saying what and when. Keep them agent-neutral.
-5. Guides are neutral technical reference. The manifesto (`docs/about/index.md`) is written in the maintainer's
-   voice.
+5. Guides are neutral technical reference. The manifesto (`docs/about/index.md`) speaks as "we", the project;
+   no personal names on the site.
 
 ## Adding a game
 

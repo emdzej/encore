@@ -4,9 +4,9 @@ title: Manifesto
 
 # One more time, please
 
-Have you tried running a game from 1997 lately? I have. Sometimes it works. More often it asks for a DirectX
+Have you tried running a game from 1997 lately? We have. Sometimes it works. More often it asks for a DirectX
 version nobody ships any more, a 16-bit installer Windows refuses to start, or a CD drive your laptop never had.
-Then it crashes on a CPU that is "too fast". Emulation helps, and I have nothing against it — but it is one more
+Then it crashes on a CPU that is "too fast". Emulation helps, and we have nothing against it — but it is one more
 layer between you and the game, and it only solves today's problem. What happens when the platform under the
 emulator goes away too?
 
@@ -17,7 +17,7 @@ rebuild the games themselves, from scratch, one to one.
 
 Reimplementing a game used to be a labour of love that took a small team years. Some of the best ones — think
 of OpenTTD, OpenRCT2 or OpenMW — took many years, and a few are still going. Is it different now? Yes, and the
-numbers make the case better than I can. [Sheep](/games/sheep) was ported in about 29 hours.
+numbers make the case better than we can. [Sheep](/games/sheep) was ported in about 29 hours.
 [Grand Theft Auto](/games/gta) in two days. [Oni](/games/oni), 3,655 functions of Bungie's engine, plays
 through all its levels after six. Those are not toy demos; they are function-by-function ports of the original
 programs, checked against the original machine code.
@@ -59,6 +59,4 @@ such as [GOG](https://www.gog.com/en/), whose mission is to preserve games as we
 
 Everything is open: the code of every port under the GPL, the [technical guides](/guides/), and a set of
 [agent skills](/skills/) that carry what we learned to the next project. If there is a game you want to see
-back, the guides are where to start. If you do start one, let me know.
-
-— Michał Jaskólski
+back, the guides are where to start. If you do start one, let us know — there is room for more of us.

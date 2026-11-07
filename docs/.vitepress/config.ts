@@ -112,7 +112,7 @@ export default defineConfig({
     footer: {
       message:
         "ENCORE ships no game code or data — bring your own copy. All games are trademarks of their respective owners; ENCORE is not affiliated with them. Each project is GPL-3.0 and runs on <a href=\"https://gasm.emdzej.pl\">gasm</a>.",
-      copyright: "Michał Jaskólski",
+      copyright: "The ENCORE contributors",
     },
   },
 });
