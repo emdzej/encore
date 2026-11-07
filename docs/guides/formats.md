@@ -4,19 +4,19 @@ title: File formats and game data
 
 # File formats and game data
 
-Every project reads the user's own copy of the game exactly as it was shipped: a disc image, a CD folder, an installed folder, or the installer itself, with InstallShield cabinets, VISE archives and ISO 9660 images opened in place. Each data format is first decoded by a Python reference tool that uses only the standard library, checked against every file on the disc, and only then written in C. The C decoder must agree with the Python one through a summary hash over the whole disc. Codecs (Smacker, Bink 1, Cinepak, MS-ADPCM and others) are written from public format descriptions, and their tables are read from the user's DLLs. This page sets out that method, the media readers, the case-insensitive file layer, the codecs, and a catalogue of the formats decoded so far.
+Every project reads the user's own copy of the game exactly as it was shipped: a disc image, a CD folder, an installed folder, or the installer itself, with InstallShield cabinets, VISE archives and ISO 9660 images opened in place. Each data format is decoded and then proved over every file on the disc: the decoder prints one summary hash over the whole disc, a test asserts it, and the same hash must come from a folder and from a disc image. Most projects also checked the decoder against something independent — the original's own reader, a second implementation, or an external tool. Codecs (Smacker, Bink 1, Cinepak, MS-ADPCM and others) are written from public format descriptions, and their tables are read from the user's DLLs. This page sets out that method, the media readers, the case-insensitive file layer, the codecs, and a catalogue of the formats decoded so far.
 
-## Reference decoder first, then C
+## Decode, then prove it over the whole disc
 
-The order is the same in every project:
+The order the projects followed:
 
 1. **Find the reader in the executable.** The loader or chunk handler is the specification. Note its address for the doc.
 2. **Write `docs/formats/<x>.md`** (or `docs/<fmt>.md`, `notes/formats.md`): offsets, sizes, flags, histograms of field values across the disc, reader addresses, and each field marked confirmed or inferred.
-3. **Write a stdlib-only Python decoder** that walks every file of that type and prints a summary line, plus PNG/WAV/OBJ export into git-ignored `out/` for inspection. OpenGTA's [gtafmt.py](https://github.com/emdzej/opengta/blob/main/tools/gtafmt.py) carries its own PNG writer, so it needs no Pillow.
-4. **Write the C decoder** and a test that prints the same line. An environment variable makes the test assert the hash.
+3. **Write the decoder** so that it walks every file of that type and prints one summary line (FNV-1a over names, sizes and decoded content, plus counts), with PNG/WAV/OBJ export into git-ignored `out/` for inspection. A test prints the same line, and an environment variable makes it assert the recorded hash.
+4. **Check it against something independent.** The strongest check is the original's own reader, run in Unicorn on the same file (see [Determinism and verification](/guides/verification)). A second implementation also works. Most projects here wrote theirs as a quick stdlib-only Python script while exploring the format — OpenGTA's [gtafmt.py](https://github.com/emdzej/opengta/blob/main/tools/gtafmt.py) even carries its own PNG writer — but the language is incidental; what counts is two readers agreeing on every file. External tools such as ffmpeg explain differences but are not the authority.
 5. **Cross-check totals** that the format implies: counts against headers, sizes against offsets, CRCs against contents.
 
-Summary hashes recorded in the projects:
+Summary hashes recorded in the projects (several were first produced by a Python script, then matched by the C decoder):
 
 | Project | Command | Coverage | Hash |
 |---|---|---|---|
@@ -147,10 +147,10 @@ Huffman tables, scan orders, quantisers and critical-band tables belong to the D
 
 1. List every file the game opens, and which function reads it, in one formats page.
 2. Accept every shipped form of the data: disc image (ISO, raw 2352 MODE1/MODE2), CD folder, installed folder, and the installer itself where the game lives inside it.
-3. Write the installer reader (InstallShield 5/6, VISE) in Python first and C second; byte-compare every extracted file with an installed copy.
+3. Write the installer reader (InstallShield 5/6, VISE) and byte-compare every file it extracts with an installed copy.
 4. Make `vfs.h` case-insensitive with either separator, resolve paths relative to the original's working directory, collapse repeated separators, and use positional 64-bit reads.
 5. Refuse `.cue` with a helpful message unless you need tracks; never convert a mixed-mode BIN to ISO.
-6. For each format: doc page with reader addresses, stdlib Python decoder with `--summary`, C decoder, test asserting the summary hash through an environment variable.
+6. For each format: doc page with reader addresses, decoder with a whole-disc `--summary`, a test asserting the hash through an environment variable, and one independent check (the original's reader under emulation, or a second reader).
 7. Run every summary from both a folder and an image; the hashes must match.
 8. Write codecs from public descriptions; read their tables from the user's DLL; compare with ffmpeg or `afconvert` to understand differences.
 9. Record quirks of each format (padding, rounding, wraps, leftovers) under "Quirks kept" in its doc.

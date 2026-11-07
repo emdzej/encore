@@ -84,7 +84,7 @@ Running the same scene from a folder and from a disc image is a cheap test with 
 
 ## Decoder parity over the whole disc
 
-Before any renderer exists, each format gets a Python reference decoder (stdlib only) and a C decoder that must print the same summary hash over every file on the disc. [cmr2](/games/cmr2) covers 7,804 DDS, 4,003 TGA, 1,211 models, 604 WAVs, 10 music files and 72 fonts; [oni](/games/oni) 8,918 textures, 37,862 geometries and 155,232 instances. Tests read the expected values from environment variables (`OPENCMR2_FMT_IMAGES`, `OPENONI_DAT_SUMMARY`, `OPENI76_ZFS_SUMMARY`). Independent decoders such as ffmpeg or `afconvert` are oracles for understanding a difference, not authorities. Details are in [File formats and game data](/guides/formats).
+Before any renderer exists, each format's decoder must print one summary hash over every file on the disc, checked against an independent reader — the original's code under emulation or a second implementation. [cmr2](/games/cmr2) covers 7,804 DDS, 4,003 TGA, 1,211 models, 604 WAVs, 10 music files and 72 fonts; [oni](/games/oni) 8,918 textures, 37,862 geometries and 155,232 instances. Tests read the expected values from environment variables (`OPENCMR2_FMT_IMAGES`, `OPENONI_DAT_SUMMARY`, `OPENI76_ZFS_SUMMARY`). Independent decoders such as ffmpeg or `afconvert` are oracles for understanding a difference, not authorities. Details are in [File formats and game data](/guides/formats).
 
 ## The original's own recordings
 
@@ -170,7 +170,7 @@ Status pages list the gaps honestly: [gta](/games/gta) has not compared frames c
 3. Compare gasm-run, the Node runner and the browser page (`?hashframes=N`, `batch=1`) for the same module, data and input.
 4. Run every hash case from both a folder and a disc image; add installer cabinets where the game ships in them.
 5. Run hash comparisons with empty storage and default settings.
-6. Write a Python reference decoder per format and assert whole-disc summary hashes from the C tests.
+6. Give every format a whole-disc summary hash asserted from the C tests, cross-checked once against an independent reader.
 7. Play the original's own replays or demos through the port as end-to-end tests.
 8. Build a Unicorn harness: original exe mapped, port state in the original layout, callouts answered from recordings, word-by-word diff; run it in every FPU mode the game uses.
 9. Keep a single regression script that prints only non-identical lines; run it niced and sequentially.

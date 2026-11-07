@@ -23,7 +23,7 @@ const pillars = [
 const steps = [
   ["Pick", "a game and pin one exact binary by size and CRC-32"],
   ["Map", "the program in Ghidra: every function, named and dated"],
-  ["Decode", "every file format, in Python first, then in C"],
+  ["Decode", "every file format, proved by a hash over the whole disc"],
   ["Port", "function by function, citing original addresses"],
   ["Verify", "with deterministic hashes and the original's own code"],
   ["Ship", "one .wasm, desktop bundles and a browser player"],

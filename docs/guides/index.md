@@ -23,7 +23,7 @@ Every project went through the same stages, in roughly this order. Each stage en
 1. **Pick the game and the approach.** Function-by-function port from disassembly (most projects), a script runtime for an engine game ([Ballance](/games/ballance) runs Virtools behaviour graphs), or a source port when the code is released ([Babo Violent 2](/games/bv)). See [Choosing an approach](/guides/approach).
 2. **Pin the binary.** One executable, identified by size and CRC-32, refused with a clear message if it differs. Every address in the project is only valid for that build.
 3. **Inventory.** Map the executable by address range, name functions in a TSV that is the single source of truth, estimate effort in kilobytes of code, write an ordered port plan with a check per step.
-4. **Formats.** Decode every file the game reads, first with a stdlib Python reference reader, then in C; both must print the same summary hash over the whole disc.
+4. **Formats.** Decode every file the game reads and prove it: one summary hash over the whole disc, asserted by a test and confirmed by an independent reader.
 5. **Port.** Function by function, in the original's call order, citing every address, reading tables from the user's executable at run time, keeping every quirk.
 6. **Verify.** Deterministic headless runs with frame and audio hashes, identical across runners and data sources; differential execution of the original's machine code where precision matters.
 7. **Platform.** Map DirectDraw, Direct3D, DirectSound, DirectInput and the rest onto gasm's small ABI, in one backend file.

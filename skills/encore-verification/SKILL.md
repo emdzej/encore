@@ -59,7 +59,7 @@ When a hash moves:
 
 ### 5. Build the stronger checks, in this order
 
-1. **Decoder parity**: a stdlib-only Python reference decoder per format prints one summary hash over every file on the disc; the C test asserts it via an env var (`OPEN<GAME>_<FMT>_SUMMARY`).
+1. **Decoder parity**: each format's decoder prints one summary hash over every file on the disc, cross-checked once against an independent reader (the original's code under emulation, or a second implementation); the C test asserts it via an env var (`OPEN<GAME>_<FMT>_SUMMARY`).
 2. **Viewers** behind `--param` (car, stage, level) as the renderer's first visual check.
 3. **Device-state tests** of the GPU-free API recording layer.
 4. **The original's own recordings** (replays, demos) played to the end through the port.

@@ -1,12 +1,12 @@
 ---
 name: encore-file-formats
-description: Decodes an old game's data files and installation media for an ENCORE-style faithful reimplementation - documents each format from the executable's own reader, writes a stdlib-only Python reference decoder with a --summary hash over every file on the disc, then a C decoder and native test that must print the same hash (asserted via an environment variable), reads the shipped media in place (ISO 9660, raw MODE1/2352 BIN, InstallShield cabinets including split files, Installer VISE) through a case-insensitive VFS, and writes codecs (Smacker, Bink 1 with tables from the user's binkw32.dll, Cinepak, MS-ADPCM) from public descriptions. Use when adding support for a new file type, codec, archive, installer or disc layout, or when a decoder disagrees with the original or between folder and image.
+description: Decodes an old game's data files and installation media for an ENCORE-style faithful reimplementation - documents each format from the executable's own reader, writes a decoder and native test that print a --summary hash over every file on the disc (asserted via an environment variable) and cross-checks it against an independent reader, reads the shipped media in place (ISO 9660, raw MODE1/2352 BIN, InstallShield cabinets including split files, Installer VISE) through a case-insensitive VFS, and writes codecs (Smacker, Bink 1 with tables from the user's binkw32.dll, Cinepak, MS-ADPCM) from public descriptions. Use when adding support for a new file type, codec, archive, installer or disc layout, or when a decoder disagrees with the original or between folder and image.
 ---
 
 # Decode file formats and game data
 
-The executable's reader is the specification. A Python reference decoder settles your understanding on every
-file of the disc before any C exists; the C decoder must then agree with it by hash. The user's media is read
+The executable's reader is the specification. A decoder is finished when it prints one summary hash over
+every file of the disc and an independent reader agrees with it. The user's media is read
 as shipped; nothing is extracted into the repository.
 
 ## When to use
@@ -50,9 +50,13 @@ Read the reader in the executable (decompile and disassembly). Note header layou
 endianness, how counts and offsets are used, what is validated, what is sanitised on read, and which
 fields are never read. Write `docs/formats/<fmt>.md` from `references/format-doc-template.md`.
 
-### 3. Python reference decoder
+### 3. Independent reader (optional, but have one check)
 
-Copy `references/decoder-templates.md` (Python part). It must:
+You need one independent confirmation of your decoder. Pick what is cheapest for the format: the original's
+own reader run in Unicorn on the same file (strongest, see encore-verification), or a second implementation.
+A quick script is often handy while you are still working the format out — `references/decoder-templates.md`
+has a stdlib-only Python one — but there is no reason to write Python first if you go straight to C. A
+second reader must:
 
 - walk every file of the type, in a fixed order (archive order or sorted names);
 - check every invariant the format implies (sizes tile the file, counts match headers, CRCs match);
@@ -69,7 +73,7 @@ with exit 0 without data, prints the same summary, and asserts it when `OPEN<GAM
 Record the expected hash in AGENTS.md next to the command.
 
 ```sh
-python3 tools/<fmt>.py --summary "$OPEN_GAME_DATA"
+python3 tools/<fmt>.py --summary "$OPEN_GAME_DATA"   # only if you wrote a second reader
 OPEN<GAME>_<FMT>_SUMMARY=<hash> ctest --test-dir build -R <fmt>_test --output-on-failure
 ```
 
@@ -77,7 +81,7 @@ OPEN<GAME>_<FMT>_SUMMARY=<hash> ctest --test-dir build -R <fmt>_test --output-on
 
 Follow `references/media.md`: ISO 9660 with sector auto-detection, raw 2352, Joliet, `.cue` handling,
 mixed-mode discs, InstallShield 5/6 cabinets (split files across volumes), Installer VISE (byte-swapped
-deflate). Write the reader in Python first, then C, then a test that byte-compares every file read through
+deflate). Write the reader, then a test that byte-compares every file read through
 it with an installed copy (`cab_test`). Mount it in the VFS so the game runs from the shipped media.
 
 ### 6. Codecs

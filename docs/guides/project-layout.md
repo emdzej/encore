@@ -29,7 +29,7 @@ open<game>/
 │   ├── fetch-gasm-runner.sh, package-gasm.sh, smoke-gasm-bundle.sh, gasm-bundle/
 │   ├── screenshots.sh, web-play-test.mjs
 │   ├── ghidra/            names.tsv, ApplyNames/FillGaps/DumpAllNamed scripts
-│   └── <fmt>.py           stdlib Python reference decoders
+│   └── <fmt>.py           exploration and cross-check scripts (optional)
 ├── docs/                  VitePress site; docs/re/ excluded from the build
 │   └── public/play/       static browser player (wasm and vendor/ git-ignored)
 ├── design/                requirement documents for other repositories

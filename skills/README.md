@@ -14,7 +14,7 @@ https://encore.emdzej.pl/guides/.
 | [`encore-new-reimplementation`](encore-new-reimplementation/SKILL.md) | Start a project end to end: choose the approach, pin the exe, lay out the repo, write AGENTS.md from the template, pin the gasm SDK, set up CMake and CI, reach the first milestone. The entry skill; routes to the others |
 | [`encore-reverse-engineering`](encore-reverse-engineering/SKILL.md) | Set up Ghidra headless, keep names in a TSV, dump the whole decompile for grepping, inventory the binary by address range, transfer names from a symbol-bearing build |
 | [`encore-port-function`](encore-port-function/SKILL.md) | Port one function or subsystem: own words, address citation, quirks kept, tables read from the exe, pending stubs, struct offsets, a test and a hash check |
-| [`encore-file-formats`](encore-file-formats/SKILL.md) | Decode a file format, archive or installer with a Python reference reader and a C decoder agreeing on whole-disc summary hashes |
+| [`encore-file-formats`](encore-file-formats/SKILL.md) | Decode a file format, archive or installer and prove it with a whole-disc summary hash and an independent check |
 | [`encore-verification`](encore-verification/SKILL.md) | Deterministic headless hashes, golden values, cross-runner and cross-source parity, regressions, differential testing against the original in Unicorn |
 | [`encore-x87-fidelity`](encore-x87-fidelity/SKILL.md) | Reproduce x87 precision and rounding modes, NaN compares, `__ftol`, constants by their bits, FMA contraction, and the MSVC CRT's `rand` and `qsort` |
 | [`encore-gasm-backend`](encore-gasm-backend/SKILL.md) | Write `platform_gasm.c` and map DirectDraw/Direct3D/OpenGL, DirectSound/Miles/FMOD, DirectInput and files onto gasm's ABI |

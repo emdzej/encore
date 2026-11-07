@@ -213,7 +213,7 @@ Done when all of these pass:
    `gasm-run build-gasm/open<game>.wasm --headless 5`.
 4. With data, a headless run prints a stable hash line, identical for `--asset-dir cd` and `--asset cd=<image>`:
    `gasm-run build-gasm/open<game>.wasm --asset cd=<image> --headless 60`.
-5. The first format has a Python reference reader and a C decoder agreeing on a whole-disc summary hash
+5. The first format has a decoder with a recorded whole-disc summary hash, confirmed by an independent reader
    (`encore-file-formats`).
 
 Record the hashes in AGENTS.md.

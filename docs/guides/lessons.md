@@ -82,9 +82,9 @@ Evidence: [OpenCMR2 `92859ab`](https://github.com/emdzej/opencmr2/commit/92859ab
 
 ## Verification
 
-### 13. Decode every format twice, and compare over the whole disc
+### 13. Prove every decoder over the whole disc
 
-Write a stdlib-only Python reference reader first, then the C decoder, and require both to print the same summary hash over every asset on the disc. Oni settled 8,918 textures, 37,862 geometries and 155,232 instances in about two days this way; Colin McRae covered 7,804 DDS, 4,003 TGA, 1,211 models and 604 sounds; Porsche Unleashed checked 10,428 FSH images. The hash goes into an environment variable the C test asserts. A second, independent tool (ffmpeg for Bink and Smacker, `afconvert` for ADPCM) helps explain differences but is not the authority — Oni's ADPCM rounds toward minus infinity where ffmpeg does not.
+A decoder is done when it prints one summary hash over every asset on the disc, that hash is recorded and asserted by a test, and something independent agrees with it — the original's own reader under emulation, or a second reader (the projects often wrote a throwaway Python one while exploring; the language does not matter). Oni settled 8,918 textures, 37,862 geometries and 155,232 instances in about two days this way; Colin McRae covered 7,804 DDS, 4,003 TGA, 1,211 models and 604 sounds; Porsche Unleashed checked 10,428 FSH images. The hash goes into an environment variable the C test asserts. A second, independent tool (ffmpeg for Bink and Smacker, `afconvert` for ADPCM) helps explain differences but is not the authority — Oni's ADPCM rounds toward minus infinity where ffmpeg does not.
 
 Evidence: [OpenOni AGENTS.md](https://github.com/emdzej/openoni/blob/main/AGENTS.md), [OpenCMR2 AGENTS.md](https://github.com/emdzej/opencmr2/blob/main/AGENTS.md), [OpenNFSPU `tests/`](https://github.com/emdzej/opennfspu/tree/main/tests).
 
