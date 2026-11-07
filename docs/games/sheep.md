@@ -52,7 +52,8 @@ DirectInput codes, and turns the registry and side files into storage keys. A Bi
 after FFmpeg's, plays the movies. The browser player is about a thousand lines of plain JavaScript modules on top.
 
 The whole thing came together in 76 commits between the afternoon of 1 November 2026 and the evening of the next day —
-roughly 29 hours of wall-clock time, in one long agent session.
+roughly 29 hours of agent time in one long session — the span of the commits, not counting the human time
+spent directing and reviewing it.
 
 ## Notable stories
 
@@ -117,6 +118,14 @@ found by address as well ([`6eefabf`](https://github.com/emdzej/opensheep/commit
 ## Gallery
 
 <Gallery />
+
+## Standing on shoulders
+
+The Bink decoder follows the structure of [FFmpeg](https://ffmpeg.org)'s libavcodec (rewritten, not vendored),
+with its tables read from your own `binkw32.dll`. The RNC ProPack unpacker ports the published Rob Northen
+Compression algorithm.
+
+Tools throughout: [Ghidra](https://ghidra-sre.org), [Capstone](https://www.capstone-engine.org), AddressSanitizer and UBSan and [wasi-sdk](https://github.com/WebAssembly/wasi-sdk). Gaps in these credits are bugs — [tell us](https://github.com/emdzej/encore/issues).
 
 ## Getting a copy
 

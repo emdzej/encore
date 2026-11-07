@@ -27,6 +27,7 @@ const steps = [
   ["Port", "function by function, citing original addresses"],
   ["Verify", "with deterministic hashes and the original's own code"],
   ["Ship", "one .wasm, desktop bundles and a browser player"],
+  ["Explain", "how the game was designed and how it works, in a theory of operation"],
 ];
 </script>
 
@@ -72,7 +73,7 @@ const steps = [
         <span class="enc-label">For the next restorer</span>
         <h2 class="enc-display">Skills for coding agents</h2>
         <p>
-          Most of these ports were written with coding agents, in days rather than years. What they learned the hard way
+          Most of these ports were written with coding agents, in days of agent time rather than years. What they learned the hard way
           is written down as portable agent skills — plain Markdown in the open Agent Skills format, usable from any agent
           that reads them.
         </p>

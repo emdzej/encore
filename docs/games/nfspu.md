@@ -29,7 +29,7 @@ Networking took the most new scaffolding. gasm offers only outbound WebSocket co
 
 Checking all of this rests on determinism. Headless gasm runs produce frame and audio hashes that are the regression oracle, and they must agree between a folder and an ISO image, between the desktop runner, the browser and a Node host, and between the launcher and a direct run. A change that moves a hash has to say why in its commit message. Opt-in additions such as widescreen must leave the hashes untouched at the original's sizes, and a dedicated test, [tests/wide_default_test.c](https://github.com/emdzej/opennfspu/blob/main/tests/wide_default_test.c), holds them to it.
 
-The source is about 97,000 lines in 170 C files, with 47 test files. The history runs to 570 commits over six days, from 30 October to 4 November 2026, all from one Claude Code session with parallel worktree agents. A playable career arrived in about three days; multiplayer and bit-exact physics came on days five and six.
+The source is about 97,000 lines in 170 C files, with 47 test files. The history runs to 570 commits over six days of agent time, from 30 October to 4 November 2026 (not counting human direction and review), all from one Claude Code session with parallel worktree agents. A playable career arrived in about three days; multiplayer and bit-exact physics came on days five and six.
 
 ## Notable stories
 
@@ -64,6 +64,16 @@ The same discipline applies to behaviour that looks like a bug but belongs to th
 ## Gallery
 
 <Gallery />
+
+## Standing on shoulders
+
+Community notes on EA's formats gave first guesses, each then checked against the data and the exe; no code
+was copied. [FFmpeg](https://ffmpeg.org)'s EA demuxer identified the MAD video and EA-XA audio. The front end's
+JPEG reader follows the [IJG libjpeg](https://ijg.org) reference the game itself linked, and its TIFF reader
+mirrors libtiff. [The Unarchiver](https://theunarchiver.com/command-line) and [Wine](https://www.winehq.org) are
+the recommended ways to get the game off a disc.
+
+Tools throughout: [Ghidra](https://ghidra-sre.org), [ghidra-cli](https://github.com/akiselev/ghidra-cli), the [Unicorn](https://www.unicorn-engine.org) emulator and [wasi-sdk](https://github.com/WebAssembly/wasi-sdk). Gaps in these credits are bugs — [tell us](https://github.com/emdzej/encore/issues).
 
 ## Getting a copy
 

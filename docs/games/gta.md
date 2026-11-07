@@ -125,6 +125,17 @@ about 4.5 times faster, to 12 ms a frame at 4x in wasm.
 
 <Gallery />
 
+## Standing on shoulders
+
+DMA Design's own *CityScape Data Structure* document (`cds.doc` v12.10) describes the map and style formats,
+and the open-source reimplementation Carnage3D was consulted as prior art — no code was copied, and the exe stays
+the authority. The intro movie decoder follows the
+[MultimediaWiki description of Smacker](https://wiki.multimedia.cx/index.php/Smacker). The optional upscalers
+are implemented from the public descriptions of [Scale2x](https://www.scale2x.it) (Andrea Mazzoleni) and xBR
+(Hyllian).
+
+Tools throughout: [Ghidra](https://ghidra-sre.org), [ghidra-cli](https://github.com/akiselev/ghidra-cli) and [wasi-sdk](https://github.com/WebAssembly/wasi-sdk). Gaps in these credits are bugs — [tell us](https://github.com/emdzej/encore/issues).
+
 ## Getting a copy
 
 OpenGTA needs the Windows version from Rockstar's 2002 re-release, the one distributed as

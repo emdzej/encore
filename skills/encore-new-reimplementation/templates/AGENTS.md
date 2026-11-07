@@ -62,6 +62,10 @@ work, each step with its check), `docs/re/architecture.md` and `docs/re/inventor
    is the only file that includes `gasm.h`.
 7. **Never add a blocking loop or a thread** in the core; keep the number and order of presents and clock
    reads the original has.
+8. **Explain the game, not only port it.** Keep `docs/re/` and `docs/formats/` accurate as each subsystem is
+   ported; when the game plays through, write `docs/guide/theory.md`, the theory of operation: how the game
+   was designed and how it works, in prose, for someone who wants to build such a game. No decompiler text,
+   no game data, no addresses in the main text.
 
 ## Layout
 
@@ -70,7 +74,7 @@ work, each step with its check), `docs/re/architecture.md` and `docs/re/inventor
 | `src/` | Portable core, in the original's module order: <modules>. `exe.c` (PE mapper), `vfs.c` (folders, ISO 9660, <archive>), `crt.c` (MSVC `rand`/`qsort`) |
 | `src/platform.h`, `src/platform_gasm.c` | The platform contract and its only gasm implementation |
 | `tests/` | Native tests against the user's data; each skips (exit 0) without it |
-| `tools/` | Reference decoders (`<fmt>.py`, stdlib only), `ghidra/` scripts and `names.tsv`, `fetch-gasm-sdk.sh` (the one `GASM_VERSION` pin), `fetch-gasm-runner.sh`, `regress.sh`, `screenshots.sh`, `package-gasm.sh`, `smoke-gasm-bundle.sh`, `web-play-test.mjs` |
+| `tools/` | Exploration and cross-check scripts (`<fmt>.py`, optional), `ghidra/` scripts and `names.tsv`, `fetch-gasm-sdk.sh` (the one `GASM_VERSION` pin), `fetch-gasm-runner.sh`, `regress.sh`, `screenshots.sh`, `package-gasm.sh`, `smoke-gasm-bundle.sh`, `web-play-test.mjs` |
 | `docs/` | VitePress site (`guide/`, `howto/`), player in `docs/public/play/`. `docs/re/` and `docs/formats/` are internal notes, excluded from the build |
 
 ## Game data

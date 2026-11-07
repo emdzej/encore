@@ -45,8 +45,8 @@ descriptions, and — the same trick as with the executable — reads its codec 
 left out and documented as such: 16-bit surface formats and their banding, mip chains, force feedback and compatibility with the original save format.
 
 The result is about 65,200 lines of C in `src/`, plus tests, Python reference tools, a 900-line emulator harness and the browser player. The history
-runs to 327 commits over four days, from 31 October to 3 November 2026, written with AI agents; the whole offline game was ported in about three of
-them.
+runs to 327 commits over four days of agent time (31 October to 3 November 2026, not counting human review and testing); the whole offline game was
+ported in about three of them.
 
 ## Notable stories
 
@@ -108,6 +108,15 @@ width while keeping the vertical field of view, snapping 2D elements that touch 
 ## Gallery
 
 <Gallery />
+
+## Standing on shoulders
+
+Every Bink movie is checked bit-exact against [FFmpeg](https://ffmpeg.org)'s decoder, while the codec tables
+come from the `binkw32.dll` on your own disc. Community modding notes for the game were allowed as hints, with the
+exe as the authority. The statically linked zlib 1.1.3 in `CMR2.exe` was replaced by the project's own inflate,
+checked against Python's zlib.
+
+Tools throughout: [Ghidra](https://ghidra-sre.org), [ghidra-cli](https://github.com/akiselev/ghidra-cli), the [Unicorn](https://www.unicorn-engine.org) emulator and [wasi-sdk](https://github.com/WebAssembly/wasi-sdk). Gaps in these credits are bugs — [tell us](https://github.com/emdzej/encore/issues).
 
 ## Getting a copy
 

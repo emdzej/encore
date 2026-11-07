@@ -69,6 +69,7 @@ Every project went through the same stages, in roughly this order. Each stage en
 | [Browser player, releases, docs](/guides/shipping) | The play page, OPFS import, saves export, release workflow and bundles, the documentation site, wording |
 | [Working with agents](/guides/agents) | What made AGENTS.md effective, commit discipline, unattended-run rules, and a full AGENTS.md template |
 | [Lessons learned](/guides/lessons) | The cross-project lessons, grouped, each with its evidence |
+| [Theory of operation](/guides/theory) | The document every port ends with: how the game was designed and how it works |
 
 ::: tip Agent skills
 The same material is packaged as [agent skills](/skills/): procedural, command-level instructions an agent loads when it starts a project, ports a function, decodes a format or cuts a release. The guides explain why; the skills say what to do next.

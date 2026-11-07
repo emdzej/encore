@@ -51,6 +51,7 @@ export default defineConfig({
           items: [
             { text: "Manifesto", link: "/about/" },
             { text: "Bring your own copy", link: "/about/your-copy" },
+            { text: "On AI", link: "/about/ai" },
             { text: "Preservation, elsewhere", link: "/about/elsewhere" },
           ],
         },
@@ -94,6 +95,7 @@ export default defineConfig({
             { text: "Browser player, releases, docs", link: "/guides/shipping" },
             { text: "Working with agents", link: "/guides/agents" },
             { text: "Lessons learned", link: "/guides/lessons" },
+            { text: "Theory of operation", link: "/guides/theory" },
           ],
         },
       ],

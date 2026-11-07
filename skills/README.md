@@ -22,6 +22,7 @@ https://encore.emdzej.pl/guides/.
 | [`encore-modern-additions`](encore-modern-additions/SKILL.md) | Add widescreen, high resolution, skins or upscaling as opt-in layers that leave the default hashes unchanged |
 | [`encore-data-hygiene`](encore-data-hygiene/SKILL.md) | Keep game data and decompiler output out of the repo, read tables from the user's exe, accept every source format, word the docs correctly |
 | [`encore-ship-release`](encore-ship-release/SKILL.md) | Build the browser player, package native bundles, cut a release, publish the docs site |
+| [`encore-theory-of-operation`](encore-theory-of-operation/SKILL.md) | Write the theory of operation: how the game was designed and how it works, for someone who wants to build such a game |
 
 ## Installation
 

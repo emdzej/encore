@@ -22,6 +22,7 @@ This repository is the ENCORE site (VitePress, `docs/`), its technical guides (`
 2. Copy the project's published screenshots to `docs/public/shots/<slug>/` (convert large PNGs to WebP).
 3. Write `docs/games/<slug>.md` with `game: <slug>` frontmatter, `<GameExhibit />` and `<Gallery />`.
 4. Mine the project into `research/open<name>.md` and fold new lessons into the guides and skills.
+5. When the project publishes its theory of operation (`docs/guide/theory.md` on its site), link it from the game page.
 
 ## Commands
 

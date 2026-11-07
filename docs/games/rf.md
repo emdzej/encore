@@ -48,7 +48,7 @@ tools. New code covers what the original got from Windows: a file layer that rea
 images directly, its own Cinepak decoder written from the public bitstream description, a single audio mixer,
 and one platform backend for [gasm](https://gasm.emdzej.pl), which runs the same WebAssembly module on macOS,
 Linux, Windows and in the browser. The repository starts with a squashed initial import (161 files, a complete
-native macOS build) followed by 31 commits over four days that added the disc reader, the portable core, the
+native macOS build) followed by 31 commits over four days of agent time that added the disc reader, the portable core, the
 gasm backend, the browser player and the bundles, and finally made gasm the only target.
 
 ## Notable stories
@@ -112,6 +112,15 @@ OPFS provider and a second keyboard layout, each with acceptance criteria. Those
 ## Gallery
 
 <Gallery />
+
+## Standing on shoulders
+
+All format knowledge comes from disassembling `RFIRE.BIN` itself; the project credits no community wikis. It
+leans on public standards and descriptions: ECMA-119 (ISO 9660) for the disc reader, a public description of the
+Cinepak bitstream for the movie decoder, and the 3DO cel engine's API names (CCB, PLUT) for the renderer,
+inherited from the 1995 3DO original the PC engine grew out of.
+
+Tools throughout: [Ghidra](https://ghidra-sre.org), [ghidra-cli](https://github.com/akiselev/ghidra-cli), [Capstone](https://www.capstone-engine.org) and [wasi-sdk](https://github.com/WebAssembly/wasi-sdk). Gaps in these credits are bugs — [tell us](https://github.com/emdzej/encore/issues).
 
 ## Getting a copy
 

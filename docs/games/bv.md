@@ -121,6 +121,17 @@ change.
 
 <Gallery />
 
+## Standing on shoulders
+
+openbv exists because RndLabs, bitHeads and David St-Louis (Daivuk) released
+[Babo Violent 2's source](https://github.com/Daivuk/BaboViolent2) under the GPL, data included. The upstream
+source carries TinyXML (Lee Thomason), FastDelegate (Don Clugston), and MD5 implementations from RSA Data
+Security and Christophe Devine. The port adds [stb_vorbis](https://github.com/nothings/stb) (Sean Barrett) for
+music and the [Rubik](https://github.com/googlefonts/rubik) typeface (OFL) for the redesigned menus; the community
+Prozac mod was a secondary reference.
+
+Tools throughout: [Ghidra](https://ghidra-sre.org) (for the Prozac build) and [wasi-sdk](https://github.com/WebAssembly/wasi-sdk); the Go server uses coder/websocket and go-oidc. Gaps in these credits are bugs — [tell us](https://github.com/emdzej/encore/issues).
+
 ## Getting a copy
 
 You need to bring nothing. The game's content — `bv2.db` and the `main/` folder, 328 files and about 18 MB of maps, models,

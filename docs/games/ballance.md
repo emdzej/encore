@@ -119,6 +119,16 @@ Evidence: [docs/ivp_core.md](https://github.com/emdzej/openballance/blob/main/do
 
 <Gallery />
 
+## Standing on shoulders
+
+The community-published [Virtools SDK 2.1 headers](https://github.com/doyaGu/Virtools-SDK-2.1) supplied vtable
+order and method names, and the public Ipion sources supplied class and field names; the leaked Ipion source was
+deliberately not consulted. The InstallShield cabinet layouts come from the documentation and sources of
+[unshield](https://github.com/twogood/unshield) — no code taken. The behaviour of the qhull library linked into
+`physics_RT.dll` was documented and replaced by a small hull builder.
+
+Tools throughout: [Ghidra](https://ghidra-sre.org), [ghidra-cli](https://github.com/akiselev/ghidra-cli), [Capstone](https://www.capstone-engine.org) and [wasi-sdk](https://github.com/WebAssembly/wasi-sdk). Gaps in these credits are bugs — [tell us](https://github.com/emdzej/encore/issues).
+
 ## Getting a copy
 
 OpenBallance ships no game data and converts nothing; it reads your own copy of Ballance as it runs. It

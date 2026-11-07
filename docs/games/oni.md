@@ -48,8 +48,8 @@ states, the port keeps them: every loop ends its frame in a wait that gasm satis
 the nested modal dialogs of Bungie's windowing toolkit work as they did.
 
 The result is about 51,800 lines of C in `src/`, some 5,200 lines across 44 tests, 2,600 lines of Python tooling and 7,700 lines of
-documentation. The repository's 90 commits span six days, 2 to 7 November 2026, and all but one of them record the agent session that
-wrote them.
+documentation. The repository's 90 commits span six days of agent time, 2 to 7 November 2026 (human direction and review not counted), and all but
+one of them record the agent session that wrote them.
 
 ## Notable stories
 
@@ -119,6 +119,16 @@ impression, not a measurement.
 
 The project's rule against committing anything derived from the game's data covers screenshots too. Its site's look comes instead from
 colours sampled from the game's menu textures, with the emblem and circuit traces redrawn.
+
+## Standing on shoulders
+
+The [OniGalore wiki](https://wiki.oni2.net) and the community's OniSplit and Daodan work are the background the
+project may consult; the exe is the authority and no code is copied. Feral's 2015 Intel Mac build of Oni, which
+carries about 6,244 of Bungie's own function names, supplied 1,055 matched names to the Windows port. The Bink
+audio transform follows Ooura's FFT package, and ADPCM output was compared with FFmpeg and Apple's `afconvert`.
+The site uses the Chakra Petch and Inter typefaces.
+
+Tools throughout: [Ghidra](https://ghidra-sre.org) (with Version Tracking), [ghidra-cli](https://github.com/akiselev/ghidra-cli) and [wasi-sdk](https://github.com/WebAssembly/wasi-sdk). Gaps in these credits are bugs — [tell us](https://github.com/emdzej/encore/issues).
 
 ## Getting a copy
 

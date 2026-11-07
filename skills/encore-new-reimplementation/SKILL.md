@@ -19,6 +19,19 @@ macOS, Linux and Windows and in the browser, from the user's own copy. Fidelity 
 4. Never paste decompiler output; write in your own words.
 5. Reproduce quirks and bugs; only fix deviations of the port.
 6. Ask the user before tagging, pushing or publishing anything.
+7. Credit every outside source you lean on (community wikis, format docs, other builds used for names,
+   reference decoders) in `docs/credits.md` as you go, not at the end.
+8. The port ends with a theory of operation (`docs/guide/theory.md`); keep `docs/re/` current until then.
+   See `encore-theory-of-operation`.
+
+## Step 0 - Check the neighbours
+
+Before any code, search for existing work on the game: decompilation projects, reimplementations, modding
+communities, format wikis (GitHub, the game's community sites, modding forums). Record what you find in
+AGENTS.md under "Prior work", with links. If a project is active, stop and tell the user: the ENCORE policy is
+to contact its people and offer help or findings rather than start a competing port, and never to fork
+someone else's decomp and "finish" it. Using published community knowledge to understand formats is fine —
+credit it in `docs/credits.md`.
 
 ## Step 1 - Choose the approach
 
@@ -201,7 +214,8 @@ per module) and `docs/re/architecture.md`. Follow `encore-reverse-engineering`.
 
 Write `docs/re/port-plan.md`: ordered steps, each ending in an automated check. A typical order: 0 file
 layer and data access, 1 gasm skeleton, 2 formats, 3 renderer with a viewer param, 4 front end, 5 game core,
-6 subsystems, 7 audio and movies, 8 browser player, 9 site, 10 release, then opt-in additions.
+6 subsystems, 7 audio and movies, 8 browser player, 9 site, 10 release, then opt-in additions, and last
+the theory of operation (`encore-theory-of-operation`).
 
 ## Step 10 - First milestone
 
@@ -232,6 +246,7 @@ Record the hashes in AGENTS.md.
 | Widescreen, hi-res, skins as opt-in layers | `encore-modern-additions` |
 | What may be committed, wording, data sources | `encore-data-hygiene` |
 | Browser player, bundles, release, docs site | `encore-ship-release` |
+| Explaining how the game works: the theory of operation | `encore-theory-of-operation` |
 
 ## Pitfalls
 

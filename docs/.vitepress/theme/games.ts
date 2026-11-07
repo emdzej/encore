@@ -210,7 +210,7 @@ export const games: Game[] = [
     play: `${site("opensheep")}/play/`,
     data: "Your Sheep CD for Windows",
     blurb:
-      "Herd a flock to its pen by where you stand, across six worlds of farms, castles and outer space. Ported in about 29 hours of agent sessions.",
+      "Herd a flock to its pen by where you stand, across six worlds of farms, castles and outer space. Ported in about 29 hours of agent time.",
     cover: "farm.jpg",
     alt: "space.jpg",
     shots: [

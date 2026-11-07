@@ -17,10 +17,12 @@ rebuild the games themselves, from scratch, one to one.
 
 Reimplementing a game used to be a labour of love that took a small team years. Some of the best ones — think
 of OpenTTD, OpenRCT2 or OpenMW — took many years, and a few are still going. Is it different now? Yes, and the
-numbers make the case better than we can. [Sheep](/games/sheep) was ported in about 29 hours.
-[Grand Theft Auto](/games/gta) in two days. [Oni](/games/oni), 3,655 functions of Bungie's engine, plays
-through all its levels after six. Those are not toy demos; they are function-by-function ports of the original
-programs, checked against the original machine code.
+numbers make the case better than we can. [Sheep](/games/sheep) took about 29 hours of agent time.
+[Grand Theft Auto](/games/gta), two days. [Oni](/games/oni), 3,655 functions of Bungie's engine, plays
+through all its levels after six. Those figures are the span of each project's commit history — the agents'
+time, not counting the human hours spent directing, reviewing and play-testing. And they are not toy demos:
+they are function-by-function ports of the original programs, verified with deterministic hashes, and in three
+of them checked against the original's own machine code.
 
 What changed is engineering experience combined with coding agents and good tooling — Ghidra, emulators for
 differential testing, deterministic hashes, and a runtime that takes the platform out of the problem. We take
@@ -48,12 +50,26 @@ Is it a lock-in? Not really. Each port keeps all of its platform code in one bac
 build — SDL, a console SDK, whatever comes next — is a backend away. That matters where WebAssembly performance
 is not enough.
 
+## What "clean" means
+
+"Clean" in ENCORE means that nothing of the original ships: no code, no art, no sound, no data. Every port reads
+all of that from your own copy at run time. It does not mean a legal clean-room process. Most of the ports are
+written function by function from a disassembly of the original program, by people (and agents) who studied
+that program closely, and we say so on every project page.
+
 ## What we don't do
 
 We don't ship games. We don't own the rights to them, and we never include their code, art, sound, music or
 data. You bring your own copy — the disc you kept, a second-hand one, or a copy bought from a store
 such as [GOG](https://www.gog.com/en/), whose mission is to preserve games as well. More on that in
 [Bring your own copy](/about/your-copy).
+
+## Good neighbours
+
+Many of these games have communities that kept them alive long before we arrived: wikis, format documentation,
+modding tools, earlier reimplementations. We build from the original programs, never by forking someone else's
+decompilation, and we credit every community resource we lean on. Before starting a game we look for existing
+projects; if one is active, we would rather help it than race it. See [On AI](/about/ai) for how we work.
 
 ## Join in
 

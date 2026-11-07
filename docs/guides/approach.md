@@ -6,6 +6,14 @@ title: Choosing an approach
 
 Every ENCORE project rebuilds an old PC game so that the same WebAssembly module runs on gasm natively and in a browser, and plays like the original. Nine projects have taken three routes to get there: a function-by-function port of the original executable from its disassembly (seven projects), a reimplementation of the engine that runs the game's own scripts (one project, a Virtools game), and a port of released source code with only the platform beneath it replaced (one project). This page explains what each route involves, what it costs, what it buys, and how to tell which one a given game needs.
 
+## Before anything: check the neighbours
+
+Search for existing work on the game first — decompilation projects, reimplementations, modding communities,
+format wikis. Record what you find in the project's `AGENTS.md` under "Prior work". If a project is active, get
+in touch and offer help or findings instead of starting a competing port, and never fork someone else's
+decompilation to "finish" it. Published community knowledge is a fine way to understand formats; credit it in
+`docs/credits.md` from the first day. See [On AI](/about/ai).
+
 ## The three routes at a glance
 
 | Route | What you write | What stays original | Projects |
@@ -120,7 +128,7 @@ Every later project started by copying proven pieces from earlier ones: the VFS 
 
 Sizes are the original's function counts as recorded in each project's inventory. Durations are the span of commit dates where the history shows the whole port. OpenRF and OpenBallance start with a squashed import of an already working port, so their total time is not known.
 
-| Game (year) | Approach | Original size | Time (commits) | Status |
+| Game (year) | Approach | Original size | Agent time (commit span) | Status |
 |---|---|---|---|---|
 | [Return Fire](/games/rf) (1996) | Function by function | 897 functions (825 auto + 72 created), ~416 renamed | Squashed import, then 31 commits in 4 days | Whole game ported, 1P and 2P; releases 0.1.0–0.4.0 |
 | [Grand Theft Auto](/games/gta) (1997) | Function by function | 1,797 names in `names.tsv`, every function from 0x401000 to the CRT | 2 days | Every single-player subsystem ported; missions not yet compared with the original; releases 0.1.0, 0.2.0 |
@@ -131,6 +139,8 @@ Sizes are the original's function counts as recorded in each project's inventory
 | [Oni](/games/oni) (2001) | Function by function | 3,655 functions, ~1,065 KB code | 6 days | All 15 levels play through via scripted routes with the game's cheats on; no release |
 | [Ballance](/games/ballance) (2004) | Script runtime + engine port | Engine DLLs: CK2 2,794, CK2_3D 3,907, VxMath 726, physics_RT 1,946 functions; 184 Building Blocks used | Squashed import | Complete; release 0.1.3 |
 | [Babo Violent 2](/games/bv) (2.11) | Source port | ~99.5k lines of vendored C++ | 2 days (client + server milestones) | Client 0.1.0; Go server milestones 1–5 |
+
+Agent time is the span from the first to the last commit. It does not include the human time spent choosing the game, steering the work, reviewing it and play-testing.
 
 A few patterns stand out:
 

@@ -8,7 +8,7 @@ Almost every commit in the ENCORE projects carries a `Claude-Session:` trailer: 
 
 ## How fast it went
 
-The commit history shows whole ports in days. The trailers make the sessions visible; the dates are commit dates.
+The commit history shows whole ports in days. The trailers make the sessions visible; the dates are commit dates, so every span below is agent time — the human hours spent choosing the game, setting direction, reviewing and play-testing are not in it.
 
 | Project | Commits | Span | Notes |
 |---|---|---|---|
@@ -16,7 +16,7 @@ The commit history shows whole ports in days. The trailers make the sessions vis
 | [OpenGTA](https://github.com/emdzej/opengta) | 48 | 2026-10-02 to 10-03, two days | Every single-player subsystem; inventory in six parallel address ranges, port in "waves" |
 | [OpenCMR2](https://github.com/emdzej/opencmr2) | 327 | 2026-10-31 to 11-03, four days | Whole offline game in about three days; bit-exact simulation via Unicorn |
 | [OpenNFSPU](https://github.com/emdzej/opennfspu) | 570 | 2026-10-30 to 11-04, six days | One session; 13 merge commits from parallel worktree agents |
-| [OpenOni](https://github.com/emdzej/openoni) | 90 | 2026-11-02 to 11-07, about six days | 89 of 90 commits with a trailer, across many sessions; all 15 levels play through |
+| [OpenOni](https://github.com/emdzej/openoni) | 90 | 2026-11-02 to 11-07, about six days | 89 of 90 commits with a trailer, across many sessions; all 14 levels play through |
 | [OpenI76](https://github.com/emdzej/openi76) | 78 | 2026-11-06 to 11-07 | In progress, differential-tested from the first filler |
 
 Speed outran verification in places — OpenSheep's own plan lists the full play-through, the side-by-side comparison and 12 levels outside the regression as still open — so the patterns below are as much about keeping fast work honest as about making it fast.
@@ -165,6 +165,10 @@ work, each step with its check), `docs/re/architecture.md` and `docs/re/inventor
    is the only file that includes `gasm.h`.
 7. **Never add a blocking loop or a thread** in the core; keep the number and order of presents and clock
    reads the original has.
+8. **Explain the game, not only port it.** Keep `docs/re/` and `docs/formats/` accurate as each subsystem is
+   ported; when the game plays through, write `docs/guide/theory.md`, the theory of operation: how the game
+   was designed and how it works, in prose, for someone who wants to build such a game. No decompiler text,
+   no game data, no addresses in the main text.
 
 ## Layout
 
@@ -173,7 +177,7 @@ work, each step with its check), `docs/re/architecture.md` and `docs/re/inventor
 | `src/` | Portable core, in the original's module order: <modules>. `exe.c` (PE mapper), `vfs.c` (folders, ISO 9660, <archive>), `crt.c` (MSVC `rand`/`qsort`) |
 | `src/platform.h`, `src/platform_gasm.c` | The platform contract and its only gasm implementation |
 | `tests/` | Native tests against the user's data; each skips (exit 0) without it |
-| `tools/` | Reference decoders (`<fmt>.py`, stdlib only), `ghidra/` scripts and `names.tsv`, `fetch-gasm-sdk.sh` (the one `GASM_VERSION` pin), `fetch-gasm-runner.sh`, `regress.sh`, `screenshots.sh`, `package-gasm.sh`, `smoke-gasm-bundle.sh`, `web-play-test.mjs` |
+| `tools/` | Exploration and cross-check scripts (`<fmt>.py`, optional), `ghidra/` scripts and `names.tsv`, `fetch-gasm-sdk.sh` (the one `GASM_VERSION` pin), `fetch-gasm-runner.sh`, `regress.sh`, `screenshots.sh`, `package-gasm.sh`, `smoke-gasm-bundle.sh`, `web-play-test.mjs` |
 | `docs/` | VitePress site (`guide/`, `howto/`), player in `docs/public/play/`. `docs/re/` and `docs/formats/` are internal notes, excluded from the build |
 
 ## Game data
