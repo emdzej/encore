@@ -1,0 +1,160 @@
+/*
+ * ENCORE — "the vault" theme.
+ * A dark preservation archive: ink walls, amber display-case light, brass rules, museum placards.
+ * Display: Space Grotesk. Body: Inter (VitePress default). Labels/metadata: IBM Plex Mono.
+ */
+@import "@fontsource-variable/space-grotesk";
+@import "@fontsource/ibm-plex-mono/400.css";
+@import "@fontsource/ibm-plex-mono/500.css";
+
+:root {
+  --enc-ink: #0e1420;
+  --enc-ink-2: #141c2b;
+  --enc-ink-3: #1c2638;
+  --enc-amber: #e8a13a;
+  --enc-amber-soft: #f2c374;
+  --enc-brass: #b8894a;
+  --enc-parchment: #efe6d4;
+  --enc-dust: #8b93a3;
+
+  --enc-font-display: "Space Grotesk Variable", "Space Grotesk", Inter, system-ui, sans-serif;
+  --enc-font-label: "IBM Plex Mono", ui-monospace, monospace;
+
+  --vp-font-family-mono: "IBM Plex Mono", ui-monospace, SFMono-Regular, Menlo, monospace;
+
+  /* Light mode: parchment archive catalogue. */
+  --vp-c-brand-1: #9a5f12;
+  --vp-c-brand-2: #b4731c;
+  --vp-c-brand-3: #c9862a;
+  --vp-c-brand-soft: rgba(201, 134, 42, 0.14);
+  --vp-c-bg: #faf6ee;
+  --vp-c-bg-alt: #f2ebdd;
+  --vp-c-bg-soft: #efe6d4;
+  --vp-c-text-1: #1b2230;
+  --vp-c-text-2: #4a5262;
+
+  --vp-home-hero-name-color: transparent;
+  --vp-home-hero-name-background: linear-gradient(120deg, #b4731c 10%, #e8a13a 60%, #f2c374);
+
+  --vp-button-brand-bg: var(--vp-c-brand-1);
+  --vp-button-brand-hover-bg: var(--vp-c-brand-2);
+}
+
+.dark {
+  --vp-c-brand-1: var(--enc-amber);
+  --vp-c-brand-2: var(--enc-amber-soft);
+  --vp-c-brand-3: #c98a2a;
+  --vp-c-brand-soft: rgba(232, 161, 58, 0.16);
+  --vp-c-bg: var(--enc-ink);
+  --vp-c-bg-alt: #0a0f18;
+  --vp-c-bg-soft: var(--enc-ink-2);
+  --vp-c-bg-elv: var(--enc-ink-2);
+  --vp-c-divider: rgba(184, 137, 74, 0.18);
+  --vp-c-gutter: #070a10;
+  --vp-c-text-1: #ece6da;
+  --vp-c-text-2: #b6b0a4;
+  --vp-c-text-3: #7d8494;
+
+  --vp-button-brand-text: var(--enc-ink);
+  --vp-button-brand-bg: var(--enc-amber);
+  --vp-button-brand-hover-text: var(--enc-ink);
+  --vp-button-brand-hover-bg: var(--enc-amber-soft);
+  --vp-button-alt-bg: transparent;
+  --vp-button-alt-border: rgba(232, 161, 58, 0.45);
+  --vp-button-alt-text: var(--enc-amber-soft);
+  --vp-button-alt-hover-bg: rgba(232, 161, 58, 0.1);
+  --vp-button-alt-hover-border: var(--enc-amber);
+  --vp-button-alt-hover-text: var(--enc-amber-soft);
+}
+
+/* ---- Typography ---- */
+
+.vp-doc h1,
+.vp-doc h2,
+.VPHero .name,
+.VPHero .text,
+.enc-display {
+  font-family: var(--enc-font-display);
+  letter-spacing: -0.02em;
+}
+.vp-doc h1 { font-weight: 600; }
+.vp-doc h2 {
+  font-weight: 600;
+  border-top: none;
+  padding-top: 0;
+  margin-top: 56px;
+}
+.vp-doc h2::after {
+  content: "";
+  display: block;
+  width: 48px;
+  height: 2px;
+  margin-top: 10px;
+  background: var(--vp-c-brand-1);
+  opacity: 0.7;
+}
+.enc-label {
+  font-family: var(--enc-font-label);
+  font-size: 11px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--vp-c-brand-1);
+}
+
+.VPNavBarTitle .title {
+  font-family: var(--enc-font-display);
+  font-weight: 700;
+  letter-spacing: 0.22em;
+}
+
+/* ---- Nav over the vault on the home page ---- */
+.dark .VPNav.home .VPNavBar:not(.has-sidebar):not(.screen-open) { background: transparent; }
+
+/* ---- Custom blocks in brass ---- */
+.dark .custom-block.tip {
+  border-color: rgba(232, 161, 58, 0.35);
+  background: rgba(232, 161, 58, 0.06);
+}
+.dark .custom-block.tip .custom-block-title { color: var(--enc-amber-soft); }
+
+/* ---- Images in docs: framed like prints ---- */
+.vp-doc img.enc-plate,
+.vp-doc .enc-plate img {
+  border-radius: 4px;
+  box-shadow: 0 0 0 1px rgba(184, 137, 74, 0.35), 0 18px 40px -18px rgba(0, 0, 0, 0.6);
+}
+
+/* Banner art at the top of a section page. */
+.enc-banner {
+  margin: 8px 0 28px;
+  border-radius: 6px;
+  overflow: hidden;
+  aspect-ratio: 16 / 6;
+  box-shadow: 0 0 0 1px rgba(184, 137, 74, 0.3);
+}
+.enc-banner img { width: 100%; height: 100%; object-fit: cover; }
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation: none !important; transition: none !important; }
+}
+
+/* A grid of screenshots in a doc page. */
+.enc-shots p { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; }
+.enc-shots img { width: 100%; aspect-ratio: 4 / 3; object-fit: cover; border-radius: 4px; box-shadow: 0 0 0 1px rgba(184, 137, 74, 0.3); }
+@media (max-width: 640px) { .enc-shots p { grid-template-columns: 1fr; } }
+
+/* Skill catalogue cards. */
+.enc-skills { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 16px; margin: 20px 0; }
+.enc-skill {
+  display: block;
+  padding: 16px 18px;
+  border-radius: 6px;
+  background: var(--vp-c-bg-soft);
+  box-shadow: 0 0 0 1px var(--vp-c-divider);
+  text-decoration: none !important;
+  color: inherit !important;
+  transition: box-shadow 0.2s;
+}
+.enc-skill:hover { box-shadow: 0 0 0 1px var(--vp-c-brand-1); }
+.enc-skill code { font-size: 14px; color: var(--vp-c-brand-1); background: none; padding: 0; }
+.enc-skill p { margin: 8px 0 0; font-size: 14px; line-height: 1.55; color: var(--vp-c-text-2); display: -webkit-box; -webkit-line-clamp: 5; -webkit-box-orient: vertical; overflow: hidden; }

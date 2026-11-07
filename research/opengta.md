@@ -1,0 +1,473 @@
+# OpenGTA — research notes
+
+Source repo: `/Users/mjaskols/Projects/my/opengta` (read-only). Mined 2026-11-07 at commit `f91a6cc`
+(48 commits total, tags `0.1.0`, `0.2.0`). Sibling projects with the same conventions: `../openrf` (Return
+Fire), `../openballance` (Ballance); much infrastructure (vfs, iscab, bundles, launchers) is inherited from them.
+
+## 1. Facts
+
+| Field | Value |
+|---|---|
+| Game | Grand Theft Auto (GTA 1), single player, three cities: Liberty City (NYC.CMP), San Andreas (SANB.CMP), Vice City (MIAMI.CMP) |
+| Original studio / publisher | DMA Design / BMG Interactive (1997); re-released by Rockstar Games in 2002 (`GTAINSTALLER.zip`) |
+| Original tech | Win32 C (MSVC, x87 FPU, 53-bit precision set by CRT), DirectDraw via **SciTech MGL** (MegaGraph), DirectInput (scan codes), DirectPlay (network), **Miles Sound System MSS32 V3.6B** (waveOut/DirectSound, streams, 70 Hz timer), RAD **Smacker** (`SMACKW32.DLL`) for the intro movie. DMA's own software rasteriser `Poly_*` (8/15/16/32 bpp paths) |
+| Target binary | `WINO/Grand Theft Auto.exe` of the 2002 re-release: 774,144 bytes, CRC-32 `a5ca070e`. Stripped. Entry 0x49dc30, WinMain 0x437230, MSVC CRT from ~0x49cb00 |
+| Not supported | 1997 DOS version, other Windows builds, retail CD exe (fails CRC), London 1969/1961 expansions (planned as "variant switches", data in `directors/` DOSBox bundle: `GTADOS/gta24_uk.exe`, `Gta24_61.exe`) |
+| Approach | **Function-by-function port from disassembly/decompilation** (Ghidra), C11, every function cites its address (`/* Map_Load 0x438200 */`). Formats cross-checked with community docs (DMA's `cds.doc` v12.10, Carnage3D) but "the exe is the authority". Smacker decoder is clean-room from MultimediaWiki. README later dropped "ported function by function" wording (`3747dfc`) but AGENTS.md still mandates it |
+| Language / build | C11, CMake >= 3.24; wasm via wasi-sdk + gasm C SDK toolchain; native build only for tools + headless tests |
+| LOC | ~56.7k lines in `src/` (game 37.1k, render 2.5k, hires additions 3.9k, audio 3.0k, front 2.7k, hud 2.0k, movie 0.8k, core files 4.7k); tests ~7.7k (23 test programs); tools ~3.7k C/Python; docs ~7,600 lines of Markdown |
+| Function inventory | `tools/ghidra/names.tsv`: 1,797 rows (addr, name, module, confidence high/med/low, description); every function 0x401000..CRT named |
+| Status | "Early but complete in scope": every single-player subsystem ported (frontend, intro movie, three cities, traffic, police, trains, explosions, HUD, mission interpreter, sound/music). Not yet: missions played through and compared with original; DirectPlay stubbed (behaves as "no service provider"); 8/15/16 bpp render paths not ported (32 bpp only) |
+| Timeline | Entire history 2026-10-02 .. 2026-10-03 (two days), all commits from Claude Code sessions (`Claude-Session:` trailer) |
+| Site | https://opengta.emdzej.pl (`docs/public/CNAME`) |
+| GitHub | `git@github.com:emdzej/opengta.git` -> https://github.com/emdzej/opengta |
+| Browser play | https://opengta.emdzej.pl/play/ (gasm Worker mode, module built from `main`) |
+| Releases | Plain semver tags, no `v`. Assets: `opengta-<ver>.wasm`, `opengta-gasm-<ver>-{macos-universal.zip, linux-x86_64.tar.gz, linux-arm64.tar.gz, windows-x86_64.zip}` + `.sha256` each. macOS: `OpenGTA (gasm).app` (id `pl.emdzej.opengta.gasm`, ad hoc signed); Linux `opengta.sh` + `.desktop`; Windows `OpenGTA.cmd` + `opengta.ps1`. No native app ships |
+| Modern additions (opt-in, display-only) | `hires=2|3|4` (up to 2560x1920, sub-pixel geometry, bilinear true-colour textures; HUD/menus/cutscenes/intro too), `hires_ui=scale|nearest|bilinear`, `upscale=xbr|xbr4|scale2x|scale4x` (art upscaled at load), `skin=a,b` PNG replacement art (tiles, sprites, paint masks, fonts, pictures, `@Nx` per-resolution variants), `shadows=1` (cast shadows from block heights), `grade=1` (per-city colour grade). Default output must stay bit-identical |
+| User-supplied data | Rockstar 2002 re-release: either the **installed folder** (`GTADATA/`, `WINO/`, `Music/`) or the **unzipped installer** (`data1.cab`, `data2.cab` read in place, no extraction). ~320 MB, mostly music. Never hosted/linked; docs must say "Rockstar's 2002 re-release", never "freeware" (`5206c47`: no official source for that claim) |
+| gasm version | 0.6.0 minimum (raw keyboard, 64-bit asset reads, `GASM_TITLE` window title). Pin in `tools/fetch-gasm-sdk.sh` (`GASM_VERSION`); `@emdzej/gasm-host` npm pin in `docs/package.json` must match |
+
+### Launch parameters (`--param name=value`, or `/play/?name=value`)
+`intro=0` (skip movie), `mission=<MISSION.INI section>` (1, 2 NYC; 102, 103 SANB; 202, 203 MIAMI; quits at level end),
+`front=0` (city viewer, no game), `map=nyc|sanb|miami`, `x`,`y` (0-255 block), `z` (0-6, 0 = top), `hires`, `skin`,
+`upscale`, `hires_ui`, `shadows`, `grade`. Browser-only: `hashframes=N`, `input=<script>`, `autoplay`.
+
+## 2. Screenshots
+
+All in `docs/public/screenshots/`, JPEG (q80 via `sips`), generated by `tools/screenshots.sh` from headless
+`gasm-run --screenshot` of the port itself (never game files, never desktop capture). Alt texts from `docs/index.md`.
+
+| File | Shows | How generated |
+|---|---|---|
+| `menu.jpg` | The start menu as OpenGTA draws it (hero image of the site) | 60 frames |
+| `players.jpg` | Player select screen with a portrait | Enter at frame 60 |
+| `cities.jpg` | City and mission select over the map of the USA | Enter x2 |
+| `options.jpg` | Options screen | Down x3, Enter |
+| `credits.jpg` | Credits screen | Esc on start menu |
+| `intro.jpg` | Intro movie frame: the BMG Interactive logo | `intro=1`, 120 frames |
+| `mission1.jpg` | Start of the first Liberty City mission: player next to a parked car | Enter x3 from menus, 400 frames |
+| `driving.jpg` | Driving a stolen car off the road past traffic in Liberty City | `mission=1` + key script, 1150 frames |
+| `mission-sanb.jpg` | Start of the first San Andreas mission | `mission=102` |
+| `mission-miami.jpg` | Start of the first Vice City mission | `mission=202` |
+| `city-nyc.jpg` | Liberty City in the city viewer: buildings and an elevated railway | `front=0 map=nyc x=150 y=60 z=2` |
+| `city-sanb.jpg` | San Andreas in the city viewer: an AUTO garage | `front=0 map=sanb x=60 y=60 z=2` |
+| `city-miami.jpg` | Vice City in the city viewer | `front=0 map=miami x=60 y=60 z=2` |
+
+Also: `docs/public/favicon.svg` (own mark; `tools/icon.py` draws the app icon from the same design). The
+"Built for gasm" badge is hotlinked from `https://gasm.emdzej.pl/badge/built-for-gasm-{light,dark,flat}.svg`
+(never recoloured/cropped; light/dark per theme on the site, dark on play page, flat in README).
+
+## 3. Workflow & tooling
+
+### Reverse engineering
+- **Ghidra** project `gta`, program `gta.exe` (copy of the original exe), driven from the shell with
+  **ghidra-cli** (`ghidra decompile 0xADDR --project gta --program gta.exe`, plus `x-ref`, `disasm`, `memory`,
+  `function rename`). Gotcha: ghidra-cli needs `java_home` (JDK 21) in its config, otherwise the launcher
+  silently **waits on stdin forever** — documented in AGENTS.md so agents don't hang.
+- **Full decompiler dump for grepping**: `tools/ghidra/DumpAllNamed.java` writes every function into
+  `re/all.c` (`// ==== Name @ addr` separators, 60 s timeout per function, "FAILED" marker). `re/funcs.txt`
+  lists functions. `re/` is git-ignored (decompiler output never committed).
+- **Names as data**: `tools/ghidra/names.tsv` (`addr name module confidence description`) is the record;
+  `tools/ghidra/apply-names.sh` -> `ApplyNames.java` pushes names into the project, then regenerates the
+  dump. Rename in the TSV, not ad hoc in Ghidra.
+- **Parallel inventory by address range**: MSVC linked objects in source order, so each module is a
+  contiguous address range. The exe was split into 6 ranges (`docs/re/inventory-1..6.md`, work files
+  `re/names/1..6.tsv`), each inventoried separately (looks like parallel agents), then merged into
+  `names.tsv`. Inventory docs list per-range: conventions, modules (span -> purpose), key structs/globals,
+  open questions. Later the port itself came in "waves" (`82cc3ea` "Integrate wave 3: shared stubs...").
+- **Decompiler failures**: `Emergency_UpdateAll` 0x419880 can't be decompiled; ported from disassembly
+  (`docs/police.md`, `docs/re/inventory-2.md:423`). Also slope drawers "ported as read, spot-checked
+  against disassembly".
+- **Reference decoders first**: `tools/gtafmt.py` (Python 3 stdlib only, own PNG writer) decodes CMP maps
+  and G24 tile sheets to PNG to confirm a format understanding against the data *before* the C port.
+
+### Agent instructions (AGENTS.md patterns that look effective)
+- One-sentence mission + "**Fidelity is the product.** Reproduce quirks and bugs. If something looks wrong,
+  check the disassembly; if the original does it, keep it and add a comment. Only fix deviations of the port."
+- **Hard rules, numbered**: (1) never commit original data or derivatives (`game/`, `installer/`,
+  `directors/`, `gta.exe`, `re/`, `out/` git-ignored); (2) **no data tables copied from the exe** — load them
+  at runtime from the exe (size + CRC check), small constants/operands OK; (3) cite the address in every
+  ported function, names consistent with Ghidra; (4) don't paste decompiler output into source or docs —
+  "own words; describe layouts, formulas and addresses"; (5) prior art may inform, no code copied.
+- **Layout table** of every path -> purpose; the only file allowed to include `gasm.h` is
+  `src/platform_gasm.c`; "All data access goes through `src/vfs.h`: no `fopen` in the core".
+- **Exact commands** for build, test, gasm build, headless run with input script, Node-runner cross-check.
+- **Determinism contract**: "Both runners must print identical `video_fnv32`/`audio_fnv32` lines... A change
+  that alters the hashes must be explained by the change."
+- **Unattended-run rules**: always `--headless`, never open a window, never macOS `screencapture`;
+  launcher test hooks (`OPENGTA_DATA`, `--dry-run`, `OPENGTA_NO_PAUSE`, point `HOME`/`XDG_*`/`APPDATA` at a
+  scratch dir) so no dialog ever blocks an agent.
+- **Docs tone rules**: no emojis, don't overstate state (status page is the truth), wording rules for the
+  data source, badge rules, dead links fail the build, screenshots only from `tools/screenshots.sh`.
+- **Expansion foresight**: "Keep the core data-driven (file names, counts and tables from the data or the
+  exe, not hard-coded per city) so [London] stays a switch, not a fork."
+- **Commit style**: imperative subject, body explains *why*. Commit bodies are dense design notes
+  (e.g. `5ebdbb6` timing, `cd5d5d6` hires invariants) — effectively a second changelog of decisions.
+- Mirrors in `docs/howto/reverse-engineering.md`: rules, Ghidra, names, check formats, "Then: port the
+  function, add or extend a test in `tests/` against the real data, update the matching page, check the
+  gasm hashes."
+
+### Build system
+- CMake: `file(GLOB CORE_SRC ...)` -> static `og_core`; each `tests/*_test.c` is its own executable + ctest
+  entry (working dir = repo root); tools `skin_template`, `skin_generate` link `og_core`.
+- `-DOPENGTA_PLATFORM=gasm` + gasm toolchain file -> `gasm_add_game(opengta ...)`; link
+  `-Wl,-z,stack-size=1048576` (map/style loading keeps big buffers on the stack; default 64 KiB too small)
+  and `--strip-debug`.
+- Warnings `-Wall -Wextra -Wno-unused-parameter`; CI adds `-Werror`, also a GCC 16 build
+  (`build-gcc`) because GCC catches different things (format-truncation, maybe-uninitialized, array-param
+  overflow; `5206c47`, `114171b`).
+- macOS default arch arm64, deployment target 11.0.
+
+### CI (`.github/workflows/`)
+- `ci.yml` (push/PR): native build + tests on macOS and Ubuntu (tests **skip without game data**, so CI is a
+  smoke test only), `python3 -m py_compile tools/*.py`; wasm job (fetch SDK, build, upload artifact);
+  package bundles for all 4 platforms, shellcheck launchers/scripts, smoke-test macOS + Linux x86_64 (ALSA
+  `libasound2t64` needed at runtime).
+- `release.yml` (tag): refuses a tag that differs from `project(OpenGTA VERSION ...)`; builds wasm + 4
+  bundles, smoke-tests each **on its own OS** (incl. Windows `gasm-smoke-windows`, linux arm64), then one
+  `release` job attaches everything with `.github/release-notes.md`. `workflow_dispatch` = snapshot
+  artifacts `0.0.0-snapshot.<sha>`.
+- `pages.yml` (push touching docs/src/CMake/SDK pin): builds the wasm, `docs/scripts/copy-wasm.sh`,
+  pnpm 10 + Node 22, `docs/scripts/vendor-web.sh` (vendors gasm-host + csfs JS from pinned npm packages
+  into `docs/public/play/vendor/`; never edit copies), `pnpm build`, asserts `play/opengta.wasm`,
+  `vendor/gasm/gasm-worker.js`, `CNAME` exist in dist, deploys to GitHub Pages. `fetch-depth: 0` for
+  VitePress lastUpdated.
+
+### Docs site
+VitePress in `docs/` (pnpm). Sections: `guide/` (index, install, game-data, running, browser, parameters,
+controls, status, troubleshooting), `howto/` (build-from-source, tests, headless, reverse-engineering,
+release, create-a-skin), `internals/index.md` + topic notes at `docs/*.md` (formats, render, sprites,
+text-fonts, frontend, audio, game-core, peds, cars, missions, hud, traffic, police, objects, trains, movie,
+hires, skins), `re/` inventories. Working notes are published as-is; new pages must be added to the sidebar
+in `docs/.vitepress/config.ts`. Theme `docs/.vitepress/theme/gta.css`: first sampled from the port's own
+frontend renders (menu font gradient, rust), later from the GTA 1 box cover (`838ee5d`).
+
+### Browser player (`docs/public/play/`)
+- `index.html`, `play.js` (500 lines), `data.js` (277 lines), `play.css`, `opengta.wasm` (copied in CI),
+  `vendor/gasm/*` (gasm-host, gasm-worker, gasm-present, webgpu-gfx, input-script, lib/{audio,gfx,input,
+  storage,assets,wasi,net,host}.js), `vendor/csfs/*` (core, fsa, opfs).
+- Flow: user picks GTA folder or unzipped installer (`showDirectoryPicker`, fallback `<input
+  webkitdirectory>`); `data.js` validates (`GTADATA/MISSION.INI` + `WINO/Grand Theft Auto.exe` of exactly
+  774,144 bytes, or `data1.cab`+`data2.cab`), keeps only what the game reads, imports into OPFS
+  `opengta-data/` via csfs (streams each file, never whole in memory); **marker `.opengta-import.json` written
+  last** so a partial import is detected. "Play without importing" uses the File/Blob provider directly.
+- Runs in gasm **Worker mode**; keys raw to the game, gamepads as pads; hold Esc = stop. Presentation via
+  gasm `GlPresenter` (sharp scaling), else 2D canvas — WebGPU not needed (2D game).
+- Storage namespace `opengta` (IndexedDB) = same as native bundle (`opengta.wasm` name decides gasm's
+  storage namespace — always bundle as `opengta.wasm`).
+- Only one tab can hold the OPFS import ("The imported data is in use").
+- Skins: picked folder's `skin.ini` + PNGs imported to OPFS, ordered list with on/off and priority, passed
+  as `skin=<lowest>,...,<highest>` with assets `skins/<name>/...` — identical to
+  `gasm-run --asset-dir skins=<folder>`.
+- `tools/web-play-test.mjs`: headless Chrome via CDP `DOM.setFileInputFiles` hands `./game` and
+  `./installer` to the real file input, exercises check/import/play/later-visit, compares hash lines with
+  `gasm-run`; every case must print PASS. `hashframes=N` puts the headless hash line in
+  `globalThis.__opengtaResult` (virtual time, in-memory storage).
+- Subtlety: gasm-run calls `gasm_exit` before printing its hash, and OpenGTA presents a last frame on exit
+  inside a level, which the Worker can't report; the test compares page vs Node GasmHost *before* exit, and
+  that host *with* exit vs gasm-run.
+
+### Native bundles (`tools/package-gasm.sh`, `tools/gasm-bundle/`)
+`fetch-gasm-runner.sh <platform>` downloads the released `gasm-run` + MIT LICENSE into
+`.deps/gasm-runner-<platform>/`. Launchers: ask once for data (installed folder or unzipped installer),
+validate and refuse with a reason (the zip itself, half an installer, wrong exe), save `data-location`;
+`--change-data`, `--forget-data`, `--help`, `--dry-run`, `--install-desktop` (Linux); Option-at-launch
+re-asks (macOS); logs `~/Library/Logs/OpenGTA/gasm.log`, `~/.local/state/opengta/gasm.log`,
+`%LOCALAPPDATA%\OpenGTA\gasm.log`. `tools/smoke-gasm-bundle.sh <archive>` tests without data;
+`OPENGTA_SMOKE_DATA=game|installer` adds a headless menus run through the launcher whose hash must equal a
+direct gasm-run. Linux bundles smoke-tested locally in Apple `container` (`debian:trixie-slim`,
+`--arch amd64 --rosetta`). Shellcheck SC2015 (`A && B || C`) bit CI's shellcheck 0.9 (`7bf5595`).
+
+## 4. Technical knowledge that generalizes
+
+### Architecture on gasm
+- Portable core never touches files or platform: `src/vfs.h` (data) and `src/platform.h` (present, keys,
+  pads, params, saves/storage, log). `platform_gasm.c` (272 lines) exports `gasm_abi_version`, `gasm_init`
+  (set frame rate, `gasm_audio_config(22050, 2)`, `gasm_input_mode(GASM_INPUT_KEYS_RAW)`, mount data,
+  `app_init`), `gasm_frame` (read 4 pads, `app_frame`, `gasm_audio_push`), `gasm_exit`. `GASM_TITLE("Grand
+  Theft Auto")`. `_Static_assert` that internal `PAD_*` bits equal `GASM_BTN_*`.
+- **Blocking loops -> per-frame state machines** (`src/app.c`): frontend = one pass of WinMain's 35 ms
+  menu loop per call (`APP_FRAME_HZ` = 1000/35 ≈ 28.57 Hz); game = `Game_Run` split into
+  `game_run_begin/step/end`, one step per call at **70 Hz** (`APP_GAME_HZ`), and the app switches
+  `plat_set_frame_rate` -> `gasm_set_frame_rate` on entering/leaving a level. The intro movie is also a
+  per-frontend-frame step (`movie_intro_step`).
+- `game_run_step` preserves present/read-controls order: it presents and reads controls, returns
+  `GAME_STEP_WAIT` until 3 ticks passed, then continues — "the number and order of presents is the original's".
+
+### Timing / frame-rate fidelity
+- Original: `Game_Run` starts a 70 Hz Miles timer (`AIL_set_timer_frequency(0x46)`) and busy-waits
+  `Timer_WaitTicks(3)` per frame => **23.33 game fps** (42.86 ms). Slow frames are not caught up (count
+  restarts each wait). Timer exists only with sound on; F8 toggles the limiter. Frontend paced by WinMain
+  `Sleep(35 - elapsed)`.
+- Port: **one clock for pacing — the audio rendered** (`5ebdbb6`). `Timer_*` (`src/audio/timer.c`) counts
+  rendered audio like Miles' timer: one 70 Hz tick = 315 audio frames at 22050 Hz; `Timer_WaitTicks`
+  returns "may run" instead of blocking. This removes the game core's own timer copy and keeps sim and
+  sound locked.
+- `clock()` for the logo animation (83 ms/frame) = frame count x 35 ms.
+- Movie: original `SmackWait` 40 ms/frame; port steps at 35 ms: frame n shows on first step with 35k >= 40n;
+  415 frames take 475 steps (16.625 s), 476th ends it; 7 frames per 8 steps (one repeat).
+
+### Determinism / verification by hash
+- Everything integer where the original is (16.16 fixed point, C truncating division, rand, timers), so the
+  same module+data+params+input gives identical `video_fnv32`/`audio_fnv32` on gasm-run (native),
+  the Node runner (`../gasm/runners/web/headless.mjs` or `npx -p @emdzej/gasm-host gasm-headless`) and the
+  browser. Also must match between `--asset-dir game` and `--asset-dir installer` (cabinets yield identical
+  bytes). Reference value (`--asset-dir installer`, no hires): `video_fnv32=67c465c2 audio_fnv32=15edf4c8`.
+- Input scripting: `--input "60:KEY(Enter),100-160:KEY(ArrowRight),430-480:KEY(ArrowRight+ArrowUp)"`;
+  `UP`, `A` etc. for pad buttons. `--screenshot` writes last frame; `--no-hash` for perf runs.
+- RNGs: `Math_Rand` 0x489abe is a 5-word additive generator (s0 = (s1+s2+s3) & 0x7fff, shift), **reseeded
+  from 0x4b3824 at every level start** => every level start identical (tested). MSVC `rand` 0x49cb27, seed 1,
+  never `srand`ed (sound, skid marks). Sound LCG `s = s*0x79+1 & 0x7ff`.
+- **x87 float fidelity** (`docs/cars.md` "Precision"): CRT sets `_controlfp(_PC_53, _MCW_PC)` at 0x49e925 and
+  nothing changes it (MGL's `_control87` only masks exceptions; DirectDraw doesn't touch FPU) => math is
+  **double precision in registers, rounded to float at stores**. Port computes in `double` in the original's
+  operand order, converts to float exactly at the original's stores (and reproduces the stores that keep an
+  unrounded register value, e.g. lateral tyre force, `Phys_PointVelocity` x but not y). `__ftol` =
+  truncation via 64-bit int. **FMA contraction disabled** via clang/GCC pragmas in physics files. Residual
+  inexactness: `fsin`/`fcos` 64-bit mantissas vs libm double => last-bit differences; libm may also differ
+  between native and wasm, so native tests and wasm are each deterministic but not necessarily equal.
+- Game state hash in tests: every car/ped/object/player record, RNGs, mission, plus CRC chain of faithful
+  frames (`tests/hires_test.c`).
+
+### File system / data access
+- `vfs.c` (from OpenRF/OpenBallance): directories and ISO images; paths normalised as the original opens
+  them (it runs from `WINO\` and opens `..\gtadata\...`) **case-insensitively** to the data root.
+- `iscab.c` (964 lines): InstallShield 5 cabinet reader written from unshield's format documentation
+  (descriptor without MD5; no `data1.hdr`) + `inflate.c`, so the **game runs straight from the unzipped
+  installer** with no extraction. Files split across volumes: GTA has one, `Music/Track8.wav` (index 17,
+  flags 5 = split|compressed), across `data1.cab`/`data2.cab` — **unshield 1.6.2 fails on it**; this reader
+  doesn't. `cab_test` byte-compares every cabinet file with the installed game.
+- gasm backend uses `gasm_asset_size64` / `gasm_asset_read_at64` (64-bit offsets; why gasm 0.6.0 is the
+  minimum) — music tracks up to 58 MB are streamed in 64 KB `vfs_read_at` reads.
+- **The original exe as a data file** (`src/exe.c`, 105 lines): minimal PE parser (e_lfanew, COFF, image
+  base, 8 section headers), read bytes by **virtual address**, CRC-32 + size check. Tables (vehicles, peds,
+  weapons, objects, junction tables, slope table 0x4b0c88, camera params 0x4b0d18, MISSION.INI type/opcode
+  name tables 0x4b0d98/0x4b0ec0, char maps, chapter tables, credits) are loaded at runtime => no copyrighted
+  data in the repo, and an exact match to the shipped binary.
+- Saves: `PLAYER_A.DAT` (0x414 bytes: settings +0, language +0x14, high scores 6x3x{s32,char[16]} +0x18,
+  8 players x 0x50 +0x180, current +0x400, net name +0x401) kept in **gasm storage**, not the game folder;
+  first run seeds from the game's own file. Registry config (key bindings from `GTA Settings.exe`) replaced
+  by that tool's first preset.
+
+### File formats decoded (little-endian)
+- **CMP city map** (version 331): header (style no., sample no., 5 section sizes), 256x256 u32 column
+  offsets, columns of u16 (s16 `h` = empty top layers, then `6-h` block indices top-first; columns shared),
+  8-byte block descriptors (type map u16: direction bits, block type 0 air/1 water/2 road/3 pavement/4
+  field/5 building, flat bit, 6-bit slope, lid rotation; ext u8: traffic-light/train hints, lid remap, flips,
+  railway; 5 face tiles), 14-byte object positions (<= 0xadd4 bytes), routes, 0x6c bytes of service
+  locations *not counted in the header*, 35-byte nav zones (x,y,w,h,sample,name[30]). File size is exactly
+  28 + 0x40000 + sizes + 0x6c. **Layers numbered from the top: z=0 highest, z=5 lowest**; world z grows
+  downward, 0x400000 per block (16.16, 64 px per block).
+- **G24 style** (version 336): 16 section sizes; tiles 64x64 8-bit in 64 KB pages of 4x4 tiles with
+  256-byte stride (`(n>>4)*0x10000 + ((n>>2)&3)*0x4000 + v*256 + (n&3)*64 + u`); renderer indexes
+  `page[v<<8|u]` with 8-bit u/v so stepping past a tile edge reads its neighbour (a fidelity hazard when
+  filtering); tile animations; CLUT pages (64 palettes x 256 colours, stored column-major B,G,R,0);
+  palette index u16 per logical palette (tiles x4 by direction/remap, then sprites, car remaps, fonts).
+- **FXT text**: bytewise encryption `b -= k; k += m; m *= 2` (mod 256) from k=0x64, m=0x63; then
+  `[id]text\0` ... `[]`; UTF-8 in FR/DE/IT; linear-scan lookup (prefix keys never match). `Text_MapChar`
+  uppercases and maps 0x80..0x100 via an exe table (0x100 reads past it — kept).
+- **FON**: count, height, per glyph width + w*h 8-bit pixels, 768-byte RGB palette; base char code given by
+  the loader (0x21 text, 1 icons, 0 digits).
+- **RAW/RAT** frontend pictures: headerless 24-bit RGB (sizes fixed by the loader, e.g. 640x168
+  `F_UPPER`, 640x480 `CUT0..5`) / 8-bit + `F_PAL.RAW`/`CUTn.ACT` (dead 8-bit path).
+- **Audio**: `.SDT` = 12-byte `{offset, length, rate}` records into headerless `.RAW` PCM; LEVEL000 16-bit
+  signed (frontend), LEVEL001..003 8-bit unsigned mono per city (bank number = **style number**; CMP
+  "sample" byte unused); VOCALCOM 71 voices read on demand; `0..5.WAV` and `Music/Track1..10.wav` RIFF
+  22050 Hz 16-bit stereo streams.
+- **MISSION.INI**: sections `[N]`, header line (name, number, CMP, style), six numbers, object lines
+  (72 type names), command lines (150 opcode names), `{...}` comments only after a blank. 32-process script
+  VM, 5000 commands x 24 bytes, 1400 script objects.
+- **Smacker** (`MOVIE.SMK`, SMK2 320x200, 415 frames, 25 fps, 44.1 kHz 16-bit mono Huffman DPCM): full
+  container/Huffman tree/value-tree-with-3-recent-escapes/palette-delta/4x4-block video spec written up in
+  `docs/movie.md` — a clean-room reusable reference. Validation trick: every tree has exactly 3 fewer nodes
+  than header allocation/4 (the escape slots).
+
+### Rendering
+- Pure **software rendering** into a 640x480 32 bpp buffer (`uint32_t` 0x00RRGGBB after
+  `Style_ConvertPalettes` with the DirectDraw surface's shifts), presented via `gasm_video_present` (RGBA,
+  stride w*4); gasm scales (`--filter sharp|nearest|xbr|fsr|crt`, `--integer-scale`, default window 960x720).
+  No GPU API translation needed: the original was a software rasteriser over DirectDraw.
+- **DMA's rasteriser ported "integer for integer"**: 16.16 edge stepping with specific rounding
+  (`+0x8000` vs `+0x7fff` on edge change), `recip[i] = 0x3f0000 / i` table (4096 entries; OOB read in
+  original -> port uses 0 and counts `poly_recip_oob`), the `add ecx,eax; adc bl,al` 8-bit carry trick
+  reproduced, u/v not reset at edge change, blend table `(a+b)>>1`, texel 0 transparent. **Rotated-tile LRU
+  cache (8 slots) ported exactly because a step overshooting a slot reads the neighbouring slot, whose
+  contents depend on LRU history.**
+- City draw order: layers 5..0, per layer sprites then blocks from the four screen edges toward the centre
+  (mirrored quadruples), so nearer blocks overdraw. Two projection implementations with different rounding
+  (vertex grid per plane vs `Sprite_WorldToScreen`) both reproduced. **Nothing clears the back buffer** —
+  uncovered pixels keep the old frame (kept, also in hires).
+- Rendering feeds game state (sprite draw trees, corner caches, delta composite cache, HUD blink counters),
+  so the faithful renderer must keep running even when an enhanced renderer is shown.
+- **Hires renderer pattern** (`src/render/hires/`, `cd5d5d6`, `bd228bb`): a display-only second pass that
+  re-walks the same draw order with each corner carrying two values — `f` (faithful integer position, used
+  for *every* visibility/culling/winding/order decision) and `h` (exact projection x N, 1/256 px, used for
+  drawing). Writes only its own frame + texture caches. HUD/frontend: hooks next to each faithful draw call
+  **record** glyph/sprite/picture draws during a frame and **replay** them at Nx (Scale2x/3x on 8-bit indices
+  for pixel art, Catmull-Rom for pictures, bilinear for movie at 3-4x). Proof tests: game state hash + CRC
+  of faithful frames identical with hires=1/2/4 in separate processes; gasm audio hash unchanged.
+- Hires perf lessons (`docs/hires.md` "Performance", `tests/hires_perf_test.c`): measured overdraw only
+  1.17 screens/frame (skip hidden-face culling: max 8% gain); time was all in bilinear filtering; trapezoid
+  faces have one coordinate constant along a span -> pre-filter the crossed texels once into a line, then
+  one blend per pixel (vs three); a blend = one 64-bit multiply with bytes spread to 16-bit lanes
+  (exhaustively verified exact); unroll x4 (+5% wasm, 0 native); register-neighbour walking slower; setting
+  alpha in the line 2x slower under gasm's JIT. Result ~4.5x faster: 4x scale 12 ms/frame in wasm. Hashing a
+  2560x1920 frame costs ~27 ms in gasm headless, capping hashed 4x runs at ~100 calls/s — use `--no-hash` for
+  perf. No SIMD/threads needed for realtime.
+- Hires sampling: bilinear **clamped to the tile's own edges** (faithful 8-bit wrap bleeds into neighbours);
+  slope texel indices 0..63 remapped `i*64/63`; integer-only so all runners agree.
+
+### Audio
+- Re-implemented the **Miles Sound System calls** the game makes (`src/audio/mss.c`), then ported the game's
+  three sound modules on top with original names: `snd.c` (handles, banks), `sound.c` (10 distance-sorted
+  loops, 3D one-shots, voices, police scanner), `music.c` (radio stations, 3 tracks each), `timer.c`.
+  Full import table -> replacement mapping in `docs/audio.md`.
+- Mixer reproduces MSS 3.6B software mixer: `v = master*volume/127`, pan table `T[p]=min(2p,128)`, 8-bit
+  per-voice 256-entry tables, 16-bit `s*(T*v/127)>>7`, **no resampling within 1% of unity**
+  (DIG_RESAMPLING_TOLERANCE 655/65536), otherwise point sampling with fraction starting at 0.5, 32-bit sum
+  clipped, **output high byte (8-bit device format)**; `MSS_OUTPUT_8BIT=0` gives 16-bit. Mix rate 22050 Hz
+  must stay (music/voices unresampled).
+- Deviation for determinism: resampling phase carries across mix buffers (MSS restarted it) so output
+  doesn't depend on render chunking. Shutdown waits (exit jingle + 1 s) don't block; `Snd_FrontendDraining`
+  reports the time.
+- Host interface: `SndHost` (listener pos, cover test, freeze, CRT rand/time) and a per-frame `SndWorld`
+  snapshot struct with fields named by original offsets — decouples sound from entity layouts.
+- Smacker audio: whole track decoded at movie start (1.46 MB) and played as one Miles sample (44.1 kHz,
+  resampled by the mixer); Smacker's MSS volume assumed full.
+- Quirks kept (examples): one-shots only panned not attenuated; every one-shot gets random pitch because a
+  test checks channel number instead of sample; `Music_PlayTrack` only makes offsets even so a 16-bit stereo
+  track at offset 2 mod 4 plays with **channels swapped**; a missing track keeps the previous length
+  (Track8 missing after unshield install).
+
+### Input
+- `gasm_input_mode(GASM_INPUT_KEYS_RAW)`; table maps W3C `KeyboardEvent.code` (`GASM_KEY_*`) -> DirectInput
+  DIK scan codes (table inherited from OpenBallance); extended keys 0x80+ -> +0x80 (Up 0xc8 -> 0x148 in the
+  game's convention; release = +0x80). `Config_MapControlKeys` conversion ported.
+- gasm has no key-release events in the frontend path, so "one key event per frame, presses only"; Shift
+  released when `plat_keys` says it's up. Num Lock treated as off for keypad.
+- Movie skip quirk kept: `Input_GetKey` returns releases too, so releasing a key held at movie start ends it;
+  only *pressing* Alt is ignored.
+- No joystick in original bindings; frontend reads keys only. Hold Esc 1 s = quit runner (gasm feature);
+  tap goes to the game.
+
+### Networking
+DirectPlay stubbed as "a machine without a service provider": `Net_ResetSync` returns start, frontend finds
+no connection, `Front_GetMultiTarget` returns -1 (single player), which also switches off network script
+rules and lets police send patrol cars. Behaviour equals original without network — not a "TODO stub".
+
+### Fonts / text / UI
+FON bitmap fonts drawn by ported blitters (a glyph running past a row end wraps to the next row — kept in
+faithful path, clipped in hires replay). FXT format strings run through a typed mini-formatter
+(`front_fmt`) instead of `sprintf` to avoid UB with mismatched conversions (same output for shipped texts).
+`HUD_Brief` sprintf's text with itself as format — port copies (no `%` in shipped texts).
+
+### Skins (modding layer)
+`skins/<name>/skin.ini` + PNGs (own PNG decoder on `inflate.c`); overlay stack skin n..1 then original art;
+paint masks for car remaps; `sprite/<n>_index.png` maps CLUT indices for multi-ramp ped remaps
+(`f91a6cc`); `@1x..@4x` variants with nearest-level fallback (`eea406f`). Tools: `skin_template`
+(asset list from user's data as metadata only, `--validate`, `--extract` reference PNGs "not to
+distribute", `--at` finds a map column's tiles), `skin_generate` (procedural flat vector skin using the
+original only as a structural reference — no colour value reaches output), `make-sample-skin.py`
+(procedural sample, no game data) so the repo can ship a working skin.
+
+## 5. Lessons learned / pitfalls (evidence)
+
+1. **Load tables from the original exe at runtime** (`src/exe.c`, hard rule 2). Avoids committing copyrighted
+   data, guarantees exact values, and the CRC check doubles as version detection with clear errors
+   ("unsupported version" for retail/patched exes).
+2. **The installer is a valid data root** (`iscab.c`, `f2898c0`): users on macOS/Linux needn't run a Windows
+   setup. Tooling pitfall: unshield 1.6.2 can't extract the split `Track8.wav`, and the game itself keeps the
+   previous track's length when a track is missing — an install made with unshield silently differs.
+3. **x87 precision is a real fidelity issue** (`d239d08`, `docs/cars.md`): compute in double, round at the
+   original's stores, keep register-resident intermediates, disable FMA contraction per file. Accept that
+   libm sin/cos may differ native vs wasm — compare hashes only within one build target.
+4. **Undefined reads in the original must be modelled, not "fixed"**: 8-bit texel wrap into neighbouring
+   tiles, rotation-cache neighbour slot (port the LRU exactly), recip OOB, type-cache row wrap, negative
+   indices. Where the original reads unrelated memory, the port uses 0/slack and documents it under "Port
+   deviations" in every topic doc. Bounds the original doesn't check -> port stops with fatal error rather
+   than corrupting (hud.md).
+5. **GCC catches what clang doesn't** (`5206c47` format-truncation & maybe-uninitialized; `114171b` array
+   parameters for the player's `{kind,id}` pair seen as overflow -> pointer params "as the original does").
+   Run a GCC `-Werror` build in CI.
+6. **Decompiler can fail**; port from disassembly (`Emergency_UpdateAll` 0x419880). Inventory notes record
+   which functions need disassembly.
+7. **Pace everything off rendered audio** (`5ebdbb6`): a single clock for the 70 Hz Miles timer removed a
+   duplicate game-core timer and made the sim/audio deterministic across runners. Model the game loop's
+   exact present/input/wait order to keep present counts identical.
+8. **Stack size**: wasm default 64 KiB stack too small for map/style loaders' stack buffers -> 1 MiB link
+   option (CMakeLists.txt).
+9. **Stale pointer across levels**: original keeps sprite info pointer from `HUD_LoadFonts`, stale when the
+   next level loads another style at same resolution; port re-looks it up each draw (hud.md deviations).
+10. **Enhancements must not perturb the sim** (`cd5d5d6`): renderer side-effects feed state, so keep the
+    faithful renderer running and make hires a read-only parallel pass; prove with state hash + audio hash
+    across hires settings in separate processes.
+11. **Profile before optimising** (`bd228bb`, hires.md): measured overdraw (1.17) killed the occlusion idea;
+    the win came from restructuring filtering. Some "obvious" micro-opts were slower under gasm's JIT.
+12. **Headless-only discipline for agents**: AGENTS.md forbids windows/screencapture; launchers have
+    non-interactive hooks; ghidra-cli JDK gotcha documented. Prevents agents hanging.
+13. **Exit-frame mismatch** between Worker host and gasm-run (`102f8be`, AGENTS.md): when comparing hashes
+    across hosts, account for frames presented during `gasm_exit`.
+14. **Wording/legal hygiene** (`5206c47`): don't call the re-release "freeware" without a source; don't
+    link copies; screenshots only from own renders; `skin_template --extract` output marked "don't
+    distribute".
+15. **Don't overstate status**: troubleshooting.md still says "walking, driving and mission scripts aren't
+    [ported]" while status.md says all are — docs drift is real; keep one status page authoritative.
+16. **Car paint detection** (`1fe4556`): remap r = palette car base + record*12 + r - 1; masks from remap 1
+    of palette 0 marked the whole car; paint = texel recoloured by > 60 (|dR|+|dG|+|dB|) in >= 3 of 12
+    remaps — remaps also tint glass/trim slightly.
+17. **Expansion-proofing**: keep counts, file names and tables data-driven so London (DOS builds, same
+    formats CMP 331/G24 336) becomes variant switches.
+18. **What is not yet verified**: no frame captures from the original compared yet (render.md, sprites.md
+    "Not compared against frames captured from the original yet"); fidelity rests on disassembly reading +
+    tests + determinism. A future project should set up original-vs-port capture early.
+
+## 6. Reusable checklists / procedures
+
+### Bootstrapping a reimplementation (OpenGTA order, `git log` bottom-up)
+1. Identify the exact target binary; record size + CRC-32; write `exe.c` (PE sections, read by VA).
+2. File layer (`vfs`) with case-insensitive, original-relative path normalisation; add installer/archive
+   readers so users can point at the distribution as shipped; byte-compare test vs installed files.
+3. Ghidra project + names TSV + apply script + full dump script; inventory the binary by contiguous
+   address ranges (parallelisable), one doc per range with conventions/modules/structs/open questions.
+4. Reference decoders in Python stdlib for each data format -> PNG; confirm before porting.
+5. Port bottom-up: map/style loaders -> renderer -> sprites -> text/fonts -> frontend state machine ->
+   audio (library emulation + game modules) -> game core (init, frame loop, entity tables with
+   `_Static_assert` offset checks) -> subsystems (cars+physics, peds/input, missions, HUD, traffic, objects,
+   trains, police) -> movie -> remaining stubs. Keep unported functions as explicit stubs with addresses.
+6. Each step: port, test against real data (skip without data), update topic doc (layouts, formulas,
+   addresses, "Quirks kept", "Port deviations"), check headless hashes on two runners.
+7. Site + browser player + bundles + release workflow; then opt-in enhancements behind params.
+
+### Per-function porting checklist
+- [ ] Name exists in `names.tsv` with module + confidence; source comment `/* Name 0xADDR */`.
+- [ ] Written in own words, not decompiler output; tables read from exe, not pasted.
+- [ ] Integer semantics: C truncating division, 16.16, 8-bit register wraps, signedness of loads.
+- [ ] Float: double compute, float at the original's stores, operand order, no FMA.
+- [ ] Out-of-range behaviour of the original identified: keep where in-bounds-but-weird, document where it
+      reads foreign memory.
+- [ ] Quirk? Keep + comment + add to the doc's "Quirks kept".
+- [ ] Struct offsets `_Static_assert`ed (32-bit-pointer-only asserts for fields after pointers).
+- [ ] Test extended; hashes unchanged or change explained in commit body.
+
+### Determinism / verification procedure
+1. `gasm-run X.wasm --asset-dir game --headless N --input "<script>"` -> `video_fnv32/audio_fnv32`.
+2. Same on Node runner, same with installer data root, same in browser via `hashframes=N` + CDP test.
+3. Native tests: level start twice -> identical state hash; RNG reseed verified.
+4. For enhancement modes: run each setting in its own process; compare state hash + faithful frame CRC chain
+   + audio hash against setting off; include a control run of the off setting twice.
+
+### Agent-instructions template (from AGENTS.md)
+What-this-is (exact binary, size, CRC) / Hard rules (numbered) / Layout table / Game data (paths, env var)
+/ Build and test (copy-paste commands) / gasm module + hash contract / Reverse engineering (tool commands
+and gotchas) / Docs site rules / Browser player / Bundles + test hooks / Releases / Expansions / Commits.
+
+### Release procedure
+Bump `project(... VERSION x.y.z)` -> `git tag x.y.z && git push origin x.y.z` (no `v`) -> release.yml checks
+tag == CMake version, builds wasm + 4 bundles, smoke-tests each on its OS, publishes with SHA-256 files and
+templated release notes (data requirement, per-OS run instructions, play URL).
+
+### Browser player data import checklist
+Directory picker + webkitdirectory fallback; validate by marker files and exact exe size; copy only files the
+game reads; stream into OPFS; write completion marker last; offer no-import mode; single-tab lock message;
+"remove imported data" with size; same storage namespace as native bundle; vendor runtime JS from pinned npm,
+never hand-edit.

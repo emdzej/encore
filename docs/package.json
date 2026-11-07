@@ -1,0 +1,22 @@
+{
+  "name": "@emdzej/encore-docs",
+  "version": "0.0.0",
+  "private": true,
+  "description": "VitePress site for ENCORE (https://encore.emdzej.pl).",
+  "type": "module",
+  "scripts": {
+    "dev": "vitepress dev",
+    "build": "vitepress build",
+    "preview": "vitepress preview"
+  },
+  "engines": {
+    "node": ">=22"
+  },
+  "devDependencies": {
+    "@fontsource-variable/space-grotesk": "^5.3.0",
+    "@fontsource/ibm-plex-mono": "^5.3.0",
+    "gray-matter": "^4.0.3",
+    "vitepress": "^1.6.3",
+    "vue": "^3.5.13"
+  }
+}
