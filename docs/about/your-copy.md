@@ -4,16 +4,16 @@ title: Bring your own copy
 
 # Bring your own copy
 
-ENCORE projects contain no part of the original games: no code, no art, no sound or music, no level data and
-no tables copied out of the program. That is a rule in every repository, not a guideline, and it shapes how the
+ENCORE projects contain no part of the original games: no code, no art, no sound or music, and no data —
+not even values copied out of the program itself. That is a rule in every repository, not a guideline, and it shapes how the
 ports are built.
 
 ## What the projects read
 
 Each port reads the game from your copy at run time — the CD itself, an image of it (`.iso`, or a raw
 `.bin`), or an installed folder, depending on the game. Several of them read the installer archives on the disc
-directly, so you never have to run a Windows setup program. Constants and tables the original program carries
-are read from your copy of that program when the game starts, not compiled into the port.
+directly, so you never have to run a Windows setup program. Even the numbers and settings built into the original
+program are read from your copy of that program when the game starts, not compiled into the port.
 
 Most projects support exactly one version of the original program, identified by its size and CRC-32, because
 a function-by-function port is a port of that one build. If your copy is a different version, the game says so

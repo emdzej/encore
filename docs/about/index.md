@@ -51,7 +51,7 @@ is not enough.
 ## What we don't do
 
 We don't ship games. We don't own the rights to them, and we never include their code, art, sound, music or
-data tables. You bring your own copy — the disc you kept, a second-hand one, or a copy bought from a store
+data. You bring your own copy — the disc you kept, a second-hand one, or a copy bought from a store
 such as [GOG](https://www.gog.com/en/), whose mission is to preserve games as well. More on that in
 [Bring your own copy](/about/your-copy).
 

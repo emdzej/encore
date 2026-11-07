@@ -16,7 +16,7 @@ const pillars = [
   {
     label: "03 · Clean",
     title: "Bring your own copy",
-    text: "No original code, art, sound or tables ship with any project. The game reads your disc or install, checks the exact version, and takes its data from there.",
+    text: "No original code, art, sound or data ships with any project. The game reads your disc or install, checks the exact version, and takes its data from there.",
   },
 ];
 
