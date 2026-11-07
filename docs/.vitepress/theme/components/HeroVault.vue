@@ -70,6 +70,7 @@ const playable = games.filter((g) => g.play).length;
         <a class="btn alt" :href="withBase('/guides/')">Read the guides</a>
         <a class="btn alt" :href="withBase('/about/ai')">On AI</a>
       </div>
+      <a class="why" :href="withBase('/about/')">Why we do this — read the manifesto →</a>
       <dl class="tally">
         <div><dt>exhibits</dt><dd>{{ games.length }}</dd></div>
         <div><dt>play in browser</dt><dd>{{ playable }}</dd></div>
@@ -257,7 +258,16 @@ const playable = games.filter((g) => g.play).length;
 .btn.alt { border: 1px solid rgba(232, 161, 58, 0.5); color: var(--enc-amber-soft); }
 .btn.alt:hover { border-color: var(--enc-amber); background: rgba(232, 161, 58, 0.08); }
 
-.tally { display: flex; gap: 36px; margin: 44px 0 0; padding-top: 18px; border-top: 1px solid rgba(184, 137, 74, 0.3); }
+.why {
+  display: inline-block;
+  margin-top: 18px;
+  font-size: 14px;
+  color: #b6b0a4;
+  text-decoration: none;
+  border-bottom: 1px solid rgba(232, 161, 58, 0.4);
+}
+.why:hover { color: var(--enc-amber-soft); border-color: var(--enc-amber); }
+.tally { display: flex; gap: 36px; margin: 32px 0 0; padding-top: 18px; border-top: 1px solid rgba(184, 137, 74, 0.3); }
 .tally div { display: flex; flex-direction: column-reverse; }
 .tally dt { font-family: var(--enc-font-label); font-size: 11px; letter-spacing: 0.14em; text-transform: uppercase; color: #8b93a3; }
 .tally dd { margin: 0; font-family: var(--enc-font-display); font-size: 34px; color: var(--enc-amber-soft); }

@@ -6,7 +6,7 @@ const pillars = [
   {
     label: "01 · Faithful",
     title: "Rebuilt one to one",
-    text: "Ported function by function from the original program, quirks and bugs included. Every port is checked against the original — frame hashes, emulated reference runs, pixel diffs.",
+    text: "Ported function by function from the original program, quirks and bugs included. Every port is verified with deterministic frame and audio hashes; three also run the original's own code side by side.",
   },
   {
     label: "02 · Portable",
@@ -39,6 +39,20 @@ const steps = [
         <h2 class="enc-display">{{ p.title }}</h2>
         <p>{{ p.text }}</p>
       </article>
+    </section>
+
+    <section class="manifesto">
+      <span class="enc-label">Manifesto</span>
+      <blockquote>
+        <p class="lead">Have you tried running a game from 1997 lately? We have.</p>
+        <p>
+          Sometimes it works. More often it asks for a DirectX version nobody ships any more, a 16-bit installer
+          Windows refuses to start, or a CD drive your laptop never had. Emulation helps — but it only solves today's
+          problem. What happens when the platform under the emulator goes away too?
+        </p>
+        <p class="answer">We rebuild the games themselves, from scratch, one to one.</p>
+      </blockquote>
+      <a class="more" :href="withBase('/about/')">Read the manifesto →</a>
     </section>
 
     <section class="block">
@@ -129,6 +143,22 @@ const steps = [
 
 .closing { text-align: center; padding: 56px 24px; border-top: 1px solid var(--vp-c-divider); border-bottom: 1px solid var(--vp-c-divider); }
 .closing p { margin: 0 auto; }
+.manifesto {
+  margin-top: 88px;
+  padding: 40px 0 8px 32px;
+  border-left: 2px solid var(--vp-c-brand-1);
+}
+.manifesto blockquote { margin: 12px 0 0; padding: 0; border: none; }
+.manifesto blockquote p { margin: 0 0 14px; max-width: 760px; font-size: 18px; line-height: 1.6; color: var(--vp-c-text-2); }
+.manifesto .lead {
+  font-family: var(--enc-font-display);
+  font-size: clamp(26px, 3.2vw, 36px);
+  font-weight: 600;
+  line-height: 1.2;
+  letter-spacing: -0.02em;
+  color: var(--vp-c-text-1);
+}
+.manifesto .answer { color: var(--vp-c-brand-1); font-weight: 600; }
 .closing h2::after { margin-left: auto; margin-right: auto; }
 .wing-note { margin-top: 4px; font-size: 14px; }
 
