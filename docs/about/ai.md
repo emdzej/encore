@@ -15,6 +15,20 @@ days. Those are the spans of the commit histories — the human time spent choos
 reviewing it and playing it is not in them. Either way, it is fast, so we owe an account of how we try to do it
 properly.
 
+## Mixed feelings
+
+We all have mixed feelings about AI. Some say it is stealing: the models were trained on other people's work,
+often without their consent. That is true. No doubt about it. And yet — it is here, and it makes things that
+were not possible, possible. For us it is hard to stand on one side of the barricade.
+
+It is a powerful tool, and we use it to do the best we can with it, technically and morally.
+
+Often someone's best skill is having great ideas, and AI lets them bring those ideas to life. Jobs needed
+Wozniak; Wozniak needed Jobs.
+
+Would it be better if ten people worked on something for a year, rather than one person equipped with agents for
+a month? Maybe. Maybe not.
+
 ## Understanding is the product
 
 The point of taking a game apart is to learn how it works, and to write that down. Every ported function cites
