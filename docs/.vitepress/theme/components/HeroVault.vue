@@ -68,6 +68,7 @@ const playable = games.filter((g) => g.play).length;
       <div class="actions">
         <a class="btn brand" :href="withBase('/games/')">Visit the collection</a>
         <a class="btn alt" :href="withBase('/guides/')">Read the guides</a>
+        <a class="btn alt" :href="withBase('/about/ai')">On AI</a>
       </div>
       <dl class="tally">
         <div><dt>exhibits</dt><dd>{{ games.length }}</dd></div>
