@@ -54,7 +54,7 @@ and we will fix it.
 Every port is verified with deterministic hashes of its video and audio, identical on every platform. Three of
 them go further and run the original program's own machine code side by side with the port, comparing results
 word for word. And every project's status page says plainly what has not been compared with the original yet —
-Sheep has not been played through end to end; Oni reaches its last level only with the game's own cheats on.
+Sheep has not been played through end to end; Oni's full run has so far been checked only with the game's own cheats on.
 
 ## Neighbours first
 

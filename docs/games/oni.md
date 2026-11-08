@@ -18,11 +18,15 @@ macOS, Linux and Windows and in the browser from a single `.wasm`. Every ported 
 and bugs included. It is not an emulator or a wrapper, and it borrows no code from the long-running Oni community projects, whose
 knowledge may inform the reading of formats but never replaces the exe as the authority.
 
-The port is under way. Every level plays through to the end of the game, driven by scripted routes, from the training and the warehouse
-to the outro movie after level 19. Those routes play with the game's own cheats switched on — invincible and mostly omnipotent —
-because their fighting is blind; without the cheats only level 1's route survives its level. Much of the presentation is still missing,
-and some pieces remain marked stand-ins in the source (parts of the camera, some fight manoeuvres, some knockdowns), to be replaced as
-the originals are ported.
+The port is well along. As of 8 November 2026 the whole front end works — the intro and outro Bink movies, the main
+menu, loading, options, the pause screen and the saved progress — and all 14 levels play through to the end of the
+game, with their scripts, cutscenes, chapter screens and music. Konoko's moves, melee, throws, weapons, powerups,
+consoles and doors are in, and so is the AI: patrols, alarms, pursuit, combat, melee, neutral characters and panic,
+with turrets and the boss's shield. So far the full run has been checked with the game's own cheats switched on
+(invincible and omnipotent), because the automated test player loses its fights without them — a limit of the test
+bot's skill, not a known bug in the port. Human play-testing is under way. A few small fidelity gaps remain, marked
+"stand-in" or "not ported" in the source, such as the characters' octree visibility and some melee and animation
+fields. You can [play it in the browser](https://openoni.emdzej.pl/play/) today with your own CD.
 
 ## How it was rebuilt
 
@@ -117,7 +121,7 @@ impression, not a measurement.
 
 <Gallery />
 
-The project has not published screenshots yet. Its site's look comes from
+Renders of the port itself at 1280×720, from the project's own session. The project site's look comes from
 colours sampled from the game's menu textures, with the emblem and circuit traces redrawn.
 
 ## Standing on shoulders
