@@ -251,7 +251,7 @@ export const games: Game[] = [
     blurb:
       "Konoko's third-person action, ported from the v1.0 Windows exe, with Bungie's own function names recovered from a later Mac build. It plays straight from the installer archive on the CD.",
     emblem: "/shots/oni-emblem.svg",
-    noShots: "OpenOni publishes no screenshots: its rules keep anything derived from the game's data out of the repository.",
+    noShots: "OpenOni has not published screenshots yet.",
     shots: [],
   },
   {

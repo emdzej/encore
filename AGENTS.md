@@ -5,8 +5,9 @@ This repository is the ENCORE site (VitePress, `docs/`), its technical guides (`
 
 ## Hard rules
 
-1. Never add game data, original code, or anything derived from game data, except screenshots a project already
-   publishes in its own `docs/public/screenshots/`. OpenOni publishes none by rule — do not add any.
+1. Never add game data, original code, or anything derived from game data. Screenshots are the exception: renders
+   of the running port, either published by the project in its `docs/public/screenshots/` or supplied by the
+   project's own session (made with `gasm-run --screenshot`). Never desktop captures, never the game's own files.
 2. Every fact in a guide, skill or game page must come from a project repository or `research/`. Link evidence as
    `https://github.com/emdzej/<repo>/blob/main/<path>` or `/commit/<hash>`. Do not invent numbers.
 3. Never call a game freeware or abandonware without an official source; never claim a store does or does not sell
