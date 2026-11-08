@@ -107,8 +107,9 @@ Decide the policy in AGENTS.md before the first image:
 - Allowed (most projects): frames of the running port, produced by `tools/screenshots.sh` from headless
   `gasm-run --screenshot` with scripted input. Never desktop captures, never the game's own image files,
   never extracted sprites.
-- Forbidden (OpenOni): screenshots count as derived data; none are published. Local captures stay in
-  git-ignored `out/`.
+- None yet (OpenOni, early OpenI76): a project may simply not have published any. That is not a ban; the
+  rule against derived data covers data files and assets, not renders of the port. Local captures stay in
+  git-ignored `out/` until the project publishes them.
 - Site identity: colours sampled from the game, shapes redrawn; heroes drawn procedurally; app icons from
   the project's own mark, not the publisher's or a manufacturer's logo.
 - Tools that can extract reference art (skin templates) label their output "do not distribute" and write it

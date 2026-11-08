@@ -152,7 +152,7 @@ Evidence: [OpenGTA `f2898c0`](https://github.com/emdzej/opengta/commit/f2898c0),
 
 ### 24. Say exactly what the user must own, and nothing more
 
-Never call a game free or freeware without an official source — OpenGTA corrected its docs to "Rockstar's 2002 re-release" for that reason. Never host or link copies. Screenshots are renders of the port by script, or none at all where the project counts them as derived data (OpenOni). Keep reverse-engineering notes, with their addresses, off the public site; the site is for players.
+Never call a game free or freeware without an official source — OpenGTA corrected its docs to "Rockstar's 2002 re-release" for that reason. Never host or link copies. Screenshots are renders of the port, made by script — never desktop captures or the game's own files. Keep reverse-engineering notes, with their addresses, off the public site; the site is for players.
 
 Evidence: [OpenGTA `5206c47`](https://github.com/emdzej/opengta/commit/5206c47), [OpenOni AGENTS.md](https://github.com/emdzej/openoni/blob/main/AGENTS.md), [OpenSheep `e9b3ff1`](https://github.com/emdzej/opensheep/commit/e9b3ff1), [OpenNFSPU `ba48ea8`](https://github.com/emdzej/opennfspu/commit/ba48ea8).
 

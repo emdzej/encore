@@ -117,7 +117,7 @@ impression, not a measurement.
 
 <Gallery />
 
-The project's rule against committing anything derived from the game's data covers screenshots too. Its site's look comes instead from
+The project has not published screenshots yet. Its site's look comes from
 colours sampled from the game's menu textures, with the emblem and circuit traces redrawn.
 
 ## Standing on shoulders
