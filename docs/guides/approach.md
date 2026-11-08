@@ -132,7 +132,7 @@ Sizes are the original's function counts as recorded in each project's inventory
 |---|---|---|---|---|
 | [Return Fire](/games/rf) (1996) | Function by function | 897 functions (825 auto + 72 created), ~416 renamed | Squashed import, then 31 commits in 4 days | Whole game ported, 1P and 2P; releases 0.1.0–0.4.0 |
 | [Grand Theft Auto](/games/gta) (1997) | Function by function | 1,797 names in `names.tsv`, every function from 0x401000 to the CRT | 2 days | Every single-player subsystem ported; missions not yet compared with the original; releases 0.1.0, 0.2.0 |
-| [Interstate '76](/games/i76) (1997) | Function by function, Unicorn-diffed | 2,172 functions in `I76.EXE` + 990 in `I76SHELL.DLL` | 2 days so far | In progress, step 3 of the plan, not playable |
+| [Interstate '76](/games/i76) (1997) | Function by function, Unicorn-diffed | 2,172 functions in `I76.EXE` + 990 in `I76SHELL.DLL` | 3 days so far | In progress: missions t01–t04 play to a win, the rest not yet played through; no release |
 | [Colin McRae Rally 2.0](/games/cmr2) (2000) | Function by function, Unicorn-diffed | 3,583 functions, ~1,023 KB code (~3,250 / 950 KB to port) | 4 days | Whole offline game playable; release 0.1.4 |
 | [Porsche Unleashed](/games/nfspu) (2000) | Function by function (game + THRASH driver DLL), Unicorn-diffed | 8,013 functions after creating missed ones (6,006 before) | 6 days | Single player end to end, multiplayer over relay; release 0.1.9, paused |
 | [Sheep](/games/sheep) (2000) | Function by function | 1,024 functions | ~29 hours | Port complete; no full play-through or side-by-side yet; no tag |
