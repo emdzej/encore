@@ -151,7 +151,8 @@ server](https://openbv.emdzej.pl/guide/server) the Go server, its admin page and
 
 ## Further reading
 
-On the project's own site, [Internals](https://openbv.emdzej.pl/internals/) describes the architecture and
+On the project's own site, the [theory of operation](https://openbv.emdzej.pl/guide/theory) explains how Babo Violent 2
+works, [Internals](https://openbv.emdzej.pl/internals/) describes the architecture and
 [Networking](https://openbv.emdzej.pl/internals/networking) the transport and protocol;
 [Status](https://openbv.emdzej.pl/status) tracks what works and what does not, and
 [Credits](https://openbv.emdzej.pl/credits) records the licences. The server specification,
