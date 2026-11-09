@@ -7,9 +7,18 @@ title: Theory of operation
 Every ENCORE port ends with a theory of operation: a document that explains how the original game was designed
 and how it works — as a program, and as a game — so that anyone can learn from it how to build a game like it.
 It is the educational product that sits beside the port, and the clearest answer to the charge that agent-made
-ports lose the understanding they were built from (see [On AI](/about/ai)). The first one is
-[How Oni works](https://openoni.emdzej.pl/guide/theory); OpenI76 plans its own as the last step of its
-[port plan](https://github.com/emdzej/openi76/blob/main/docs/re/port-plan.md).
+ports lose the understanding they were built from (see [On AI](/about/ai)). Every project in the collection now
+has one:
+[Return Fire](https://openrf.emdzej.pl/guide/theory),
+[Grand Theft Auto](https://opengta.emdzej.pl/guide/theory),
+[Interstate '76](https://openi76.emdzej.pl/guide/theory),
+[Colin McRae Rally 2.0](https://opencmr2.emdzej.pl/guide/theory),
+[Porsche Unleashed](https://opennfspu.emdzej.pl/guide/theory),
+[Sheep](https://opensheep.emdzej.pl/guide/theory),
+[Oni](https://openoni.emdzej.pl/guide/theory),
+[Ballance](https://openballance.emdzej.pl/guide/theory) and
+[Babo Violent 2](https://openbv.emdzej.pl/guide/theory). Each project's AGENTS.md has a hard rule to keep it
+current.
 
 ## What it is, and what it is not
 
@@ -62,10 +71,11 @@ machine, the renderer's pipeline. Mermaid in VitePress or plain SVG both work.
 
 ## When and where
 
-The theory of operation is written once, when the port is complete — when the game plays through. Until then
-the per-subsystem pages in `docs/re/` and `docs/formats/` are kept accurate as each part is ported, because
-they are its source material; a theory written from stale notes is worse than none. Writing it is the last step
-of the port plan, and the port is not finished until it exists.
+The full theory of operation is written when the game plays through, and kept current after that. Projects still
+in progress may publish an early version, as long as it says plainly what is not understood yet. Either way, the
+per-subsystem pages in `docs/re/` and `docs/formats/` are kept accurate as each part is ported, because they are
+its source material; a theory written from stale notes is worse than none. It is the last step of the port plan,
+and the port is not finished until it exists.
 
 Put it at `docs/guide/theory.md` so it is published on the project's site (Oni's lives there, linked from the
 site's guide sidebar), and link it from the README and from the game's ENCORE page.
