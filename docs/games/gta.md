@@ -155,7 +155,8 @@ covers the macOS, Linux and Windows bundles, and [Playing in the browser](https:
 
 ## Further reading
 
-On the project site: the [status page](https://opengta.emdzej.pl/guide/status), the
+On the project site: the [theory of operation](https://opengta.emdzej.pl/guide/theory), which explains how GTA works, the
+[status page](https://opengta.emdzej.pl/guide/status), the
 [internals overview](https://opengta.emdzej.pl/internals/) with topic notes such as the
 [city renderer](https://opengta.emdzej.pl/render), [sound and music](https://opengta.emdzej.pl/audio),
 the [Smacker intro movie](https://opengta.emdzej.pl/movie) and the
