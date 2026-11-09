@@ -136,7 +136,7 @@ picked files. Network play is set up as described in [Network play](https://open
 
 ## Further reading
 
-The project site covers [what works today](https://opencmr2.emdzej.pl/guide/status), [the gasm runtime](https://opencmr2.emdzej.pl/guide/gasm) and
+The project site's [theory of operation](https://opencmr2.emdzej.pl/guide/theory) explains how Colin McRae Rally 2.0 works. The site also covers [what works today](https://opencmr2.emdzej.pl/guide/status), [the gasm runtime](https://opencmr2.emdzej.pl/guide/gasm) and
 [building from source](https://opencmr2.emdzej.pl/howto/build). The reverse-engineering notes, format descriptions and porting rules are kept in the
 repository rather than on the site: the [architecture](https://github.com/emdzej/opencmr2/blob/main/docs/re/architecture.md),
 [inventory](https://github.com/emdzej/opencmr2/blob/main/docs/re/inventory.md) and [port
