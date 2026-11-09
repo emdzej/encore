@@ -147,7 +147,8 @@ Windows, and the bare `.wasm`, are on the [releases page](https://github.com/emd
 
 ## Further reading
 
-On the project site, the [status page](https://openballance.emdzej.pl/guide/status) sets out what works
+On the project site, the [theory of operation](https://openballance.emdzej.pl/guide/theory) explains how Ballance works,
+the [status page](https://openballance.emdzej.pl/guide/status) sets out what works
 and what does not, and the [internals](https://openballance.emdzej.pl/internals/) begin with the
 [architecture](https://openballance.emdzej.pl/internals/architecture) and the
 [initial analysis](https://openballance.emdzej.pl/internals/analysis) that chose a script runtime over
