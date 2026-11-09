@@ -141,8 +141,8 @@ browser player refuse a `.cue`; choose the `.bin` next to it instead. The projec
 ## Further reading
 
 The OpenRF site has the [user guide](https://openrf.emdzej.pl/guide/), the
-[controls](https://openrf.emdzej.pl/guide/controls) and [vehicles](https://openrf.emdzej.pl/guide/vehicles),
-and the internals: the [architecture](https://openrf.emdzej.pl/architecture),
+[controls](https://openrf.emdzej.pl/guide/controls) and [vehicles](https://openrf.emdzej.pl/guide/vehicles), and its [theory of
+operation](https://openrf.emdzej.pl/guide/theory), which explains how Return Fire works. Then come the internals: the [architecture](https://openrf.emdzej.pl/architecture),
 [rendering](https://openrf.emdzej.pl/render) and [game simulation](https://openrf.emdzej.pl/game) notes, the
 [portable core](https://openrf.emdzej.pl/internals/portable-core), and the file formats —
 [ART.CAR](https://openrf.emdzej.pl/car), [RFM maps](https://openrf.emdzej.pl/rfm) and
