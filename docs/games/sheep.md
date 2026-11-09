@@ -147,7 +147,8 @@ guide](https://opensheep.emdzej.pl/guide/build) explains how to make your own.
 ## Further reading
 
 The project site is deliberately for players: its [guide](https://opensheep.emdzej.pl/guide/), the [developer
-options](https://opensheep.emdzej.pl/guide/developer) and the [gallery](https://opensheep.emdzej.pl/gallery). The
+options](https://opensheep.emdzej.pl/guide/developer), the [gallery](https://opensheep.emdzej.pl/gallery) and the
+[theory of operation](https://opensheep.emdzej.pl/guide/theory), which explains how Sheep works. The
 internals were moved off the site into the repository ([`e9b3ff1`](https://github.com/emdzej/opensheep/commit/e9b3ff1)):
 [`notes/architecture.md`](https://github.com/emdzej/opensheep/blob/main/notes/architecture.md) has the address map, main
 loop and state machine, and [`notes/formats.md`](https://github.com/emdzej/opensheep/blob/main/notes/formats.md) every
