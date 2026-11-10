@@ -87,6 +87,8 @@ Users have the data in many shapes; support all of them in the VFS, and prove th
 | InstallShield cabinets (`data1.hdr`/`.cab`) | Own reader + inflate, read in place; byte-compare every file against an installed copy in a test |
 | Other installer archives (MindVision VISE, RAR SFX) | Own reader as a file layer when feasible; otherwise document the extraction tool that works (`unar` for RAR SFX) |
 | Joliet names | Prefer the Joliet tree when the primary tree is 8.3 only |
+| Floppy image (FAT12 `.img`, 720 KB / 1.44 MB) | FAT reader over the same positional reads; extract with your own reader (some tools list the volume label as an empty file) |
+| Packed executable (PKLITE) | Run the loader's steps on the user's file, its tables read from it; check the unpacked image by size + CRC against an independent unpacker; never store the unpacked copy |
 
 Verification: the same headless run gives identical `video_fnv32`/`audio_fnv32` from every accepted source.
 Without data, the module exits 1 with "game data not found" (not a crash).

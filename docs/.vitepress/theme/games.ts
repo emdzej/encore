@@ -37,6 +37,26 @@ const site = (p: string) => `https://${p}.emdzej.pl`;
 
 export const games: Game[] = [
   {
+    slug: "mm",
+    project: "OpenMM",
+    title: "Micro Machines",
+    year: 1994,
+    studio: "Codemasters",
+    publisher: "Codemasters",
+    original: "DOS · real-mode assembly · VGA mode 13h · AdLib via Sound Images · PKLITE",
+    approach: "Function-by-function port",
+    status: "groundwork",
+    statusNote: "The floppy is read and the program unpacked; the game does not run yet",
+    site: site("openmm"),
+    repo: gh("openmm"),
+    data: "Your Micro Machines DOS floppy (720 KB image, its files, or the installed game)",
+    blurb:
+      "Toy vehicles racing on tracks like Desktop Dropoff and Bermuda Bathtub. The first DOS game in the collection: hand-written assembly, unpacked by a port of its own PKLITE loader.",
+    emblem: "/shots/mm-emblem.svg",
+    noShots: "No screenshots yet: the port does not draw the game yet. Renders of the running port will appear here once it does.",
+    shots: [],
+  },
+  {
     slug: "rf",
     project: "OpenRF",
     title: "Return Fire",

@@ -71,6 +71,11 @@ Some repacked Porsche Unleashed ISOs have a RAR SFX as `Setup/install.exe`. Open
 - Mixed-mode discs. Interstate '76's disc 2 has a MODE1/2352 data track and 16 Red Book audio tracks with the soundtrack (32.9 minutes). Converting the BIN to ISO throws the music away. The plan is a `vfs_cue.c` exposing audio tracks as raw 44.1 kHz s16 stereo PCM ranges, with FLAC/Ogg/WAV fallbacks and silence logged once ([port-plan.md](https://github.com/emdzej/openi76/blob/main/docs/re/port-plan.md)).
 - Volume labels. Interstate '76 finds its CD by volume label (`Cd_FindByLabel` 0x484c20) and disc 2 by label `I76_CD2` plus `int12f01.smk`. The file layer must answer those queries.
 
+### Floppy images and packed programs
+
+- Micro Machines came on one 720 KB floppy. OpenMM reads FAT12 and FAT16 images over the same positional asset reads as ISO 9660, the tree once at mount, each file's cluster chain at open ([vfs.c](https://github.com/emdzej/openmm/blob/main/src/vfs.c)). Some archive tools list the volume label's directory entry as an empty file (`MICROMAS.TER` for the label `MICROMASTER`), so a folder made with them has one file more than the disk; the project extracts with its own reader and tests that folder and image agree ([vfs_test.c](https://github.com/emdzej/openmm/blob/main/tests/vfs_test.c), [fat.py](https://github.com/emdzej/openmm/blob/main/tools/fat.py)).
+- A compressed executable is still the user's data. `MICRO.EXE` is PKLITE-packed, so OpenMM runs the loader's own steps on the user's file, reads the loader's tables from its decrypted code, and checks the unpacked image by size and CRC-32 against two independent unpackers: deark and the original stub run in Unicorn ([pklite.c](https://github.com/emdzej/openmm/blob/main/src/pklite.c), [pklite.md](https://github.com/emdzej/openmm/blob/main/docs/formats/pklite.md)). No unpacked copy is stored anywhere.
+
 ## The file layer
 
 Every project has one `vfs.h`, and nothing else in the core opens files. Its properties:
@@ -112,6 +117,7 @@ Huffman tables, scan orders, quantisers and critical-band tables belong to the D
 
 | Game | Format | What it is | Write-up |
 |---|---|---|---|
+| Micro Machines | FAT12, PKLITE | The 720 KB floppy; `MICRO.EXE`'s compression, with an xor-protected second stage and literals xor-ed with the bit count | [pklite.md](https://github.com/emdzej/openmm/blob/main/docs/formats/pklite.md) |
 | Return Fire | `ART.CAR` | `CCBA` relocatable memory image of 2,165 3DO CCBs; `PRE0` reused as PC draw mode; game colours at +10 in the Win32 `LOGPALETTE` | [car.md](https://github.com/emdzej/openrf/blob/main/docs/car.md) |
 | Return Fire | `.RFM` | `WRL\0`, 128x128 tiles, tagged chunks `NAME VHCL LEVL EDTN`; 204 maps | [rfm.md](https://github.com/emdzej/openrf/blob/main/docs/rfm.md) |
 | Return Fire | `.STM` | AVIFile dump header, 64 KB super-blocks of Cinepak video records and PCM audio | [stm.md](https://github.com/emdzej/openrf/blob/main/docs/stm.md) |
