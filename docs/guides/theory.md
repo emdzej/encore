@@ -16,8 +16,9 @@ has one:
 [Porsche Unleashed](https://opennfspu.emdzej.pl/guide/theory),
 [Sheep](https://opensheep.emdzej.pl/guide/theory),
 [Oni](https://openoni.emdzej.pl/guide/theory),
-[Ballance](https://openballance.emdzej.pl/guide/theory) and
-[Babo Violent 2](https://openbv.emdzej.pl/guide/theory). Each project's AGENTS.md has a hard rule to keep it
+[Ballance](https://openballance.emdzej.pl/guide/theory),
+[Babo Violent 2](https://openbv.emdzej.pl/guide/theory) and
+[Micro Machines](https://openmm.emdzej.pl/guide/theory). Each project's AGENTS.md has a hard rule to keep it
 current.
 
 ## What it is, and what it is not

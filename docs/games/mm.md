@@ -25,18 +25,39 @@ the keyboard, the joystick port and the sound hardware are modelled only as far 
 them, and the program's own code is rewritten
 ([architecture.md](https://github.com/emdzej/openmm/blob/main/docs/re/architecture.md)).
 
-The project is at its very beginning. As of 10 November 2026 the file layer reads the floppy as a FAT12
-image, its extracted files or an installed copy, and gives the same 162 files from each, checked against
-an independent reader. The program is checked by size and CRC-32 and unpacked, and the gasm module starts,
-finds the data and shows a blank screen. Nothing of the game runs yet. The
-[port plan](https://github.com/emdzej/openmm/blob/main/docs/re/port-plan.md) sets out the order of work,
-from reading the whole program in Ghidra through the machine model, the formats, the front end and the
-race to the sound driver, each step ending in a check, and its last step is a theory of operation.
+As of 10 November 2026 every routine of the program that runs has been rewritten, with the launcher
+`MICRO.COM`'s order, the Codemasters splash screen `SM.EXE`, the code-card check and both sound drivers.
+The port plays from the splash through the menus into one- and two-player races, with the AdLib music and
+effects through a model of its sound chip written for the port, and runs in the browser from the player's
+own floppy. It is checked against the original program running in an emulator in two ways: 151 routines
+one call at a time, the same memory and registers after each, and whole runs picture by picture, where a
+two-player game, a qualifying race and a one-player series give the original's pictures in the original's
+order ([status](https://openmm.emdzej.pl/guide/status),
+[porting.md](https://github.com/emdzej/openmm/blob/main/docs/re/porting.md)). How the game works is
+written up as a [theory of operation](https://openmm.emdzej.pl/guide/theory).
 
 The rules, the CMake layout and the gasm backend were taken from OpenCMR2 and OpenI76, with the CD-image
 reader replaced by a FAT one and the 3D presentation by OpenI76's 8-bit frame.
 
 ## Notable stories
+
+### Checking hand-written assembly one routine at a time
+
+Hand-written assembly passes values in registers and flags as it likes, so the port keeps them: every
+routine is a C function over a model of the CPU's registers and the 1 MB of real-mode memory, and leaves
+both as the original leaves them. That makes each routine checkable alone. A recorder runs the original in
+the emulator until the routine is entered, saves memory and registers, and logs every port access,
+interrupt and sound-driver call until it returns; the checker replays that into the port's routine and
+compares
+([capture.py](https://github.com/emdzej/openmm/blob/main/tools/emu/capture.py),
+[fncheck.c](https://github.com/emdzej/openmm/blob/main/tools/fncheck.c)). Tracks the recorded runs never
+reach are recorded by writing the theme and the track into the original's memory as a race starts.
+
+The routines that wait for the timer cannot be recorded this way, so whole runs are compared instead: the
+same keys into both, then the sequence of distinct pictures. The differences left all trace to the
+emulator's clock rather than the port. Its timer drifts against its frames by one tick every 169 frames,
+which is enough to put a blinking prompt or the cars' blink before the start in the other phase
+([porting.md](https://github.com/emdzej/openmm/blob/main/docs/re/porting.md)).
 
 ### Unpacking the program the way it unpacks itself
 
@@ -93,7 +114,8 @@ OpenMM contains no code or data from the game. You will need your own copy of Mi
 720 KB floppy whose `MICRO.EXE` is 28,955 bytes (CRC-32 `8e84eb22`), as a disk image, as its files, or
 installed from it to a hard disk. Other versions of the program are refused with a message.
 
-There is no player or release yet. The project's [game data](https://openmm.emdzej.pl/guide/game-data)
+The [play page](https://openmm.emdzej.pl/play/) runs the port in the browser from your own floppy image or
+its files; there is no release yet. The project's [game data](https://openmm.emdzej.pl/guide/game-data)
 page lists the accepted forms, and the [disk
 inventory](https://github.com/emdzej/openmm/blob/main/docs/re/inventory.md) describes what is on the
 floppy.
