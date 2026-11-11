@@ -25,14 +25,16 @@ the keyboard, the joystick port and the sound hardware are modelled only as far 
 them, and the program's own code is rewritten
 ([architecture.md](https://github.com/emdzej/openmm/blob/main/docs/re/architecture.md)).
 
-As of 10 November 2026 every routine of the program that runs has been rewritten, with the launcher
-`MICRO.COM`'s order, the Codemasters splash screen `SM.EXE`, the code-card check and both sound drivers.
-The port plays from the splash through the menus into one- and two-player races, with the AdLib music and
-effects through a model of its sound chip written for the port, and runs in the browser from the player's
-own floppy. It is checked against the original program running in an emulator in two ways: 151 routines
-one call at a time, the same memory and registers after each, and whole runs picture by picture, where a
-two-player game, a qualifying race and a one-player series give the original's pictures in the original's
-order ([status](https://openmm.emdzej.pl/guide/status),
+As of 11 November 2026 every routine of the program that runs has been rewritten, with the launcher
+`MICRO.COM`'s order, the Codemasters splash screen `SM.EXE`, the code-card check and both sound drivers;
+the fourteen routines left are never reached. The port plays the whole game: from the splash through the
+menus, a one-player championship from the qualifier to CHAMPIONSHIP WINNER, and two-player races and
+tournaments, with the AdLib music and effects through a model of its sound chip written for the port. It
+runs in the browser from the player's own floppy. It is checked against the original program running in
+an emulator in two ways: 151 routines one call at a time, the same memory and registers after each, and
+whole runs picture by picture, where a two-player race, a two-player tournament, a qualifying race, a
+failed qualifier and a whole championship give the original's pictures in the original's order
+([status](https://openmm.emdzej.pl/guide/status),
 [porting.md](https://github.com/emdzej/openmm/blob/main/docs/re/porting.md)). How the game works is
 written up as a [theory of operation](https://openmm.emdzej.pl/guide/theory).
 
@@ -58,6 +60,14 @@ same keys into both, then the sequence of distinct pictures. The differences lef
 emulator's clock rather than the port. Its timer drifts against its frames by one tick every 169 frames,
 which is enough to put a blinking prompt or the cars' blink before the start in the other phase
 ([porting.md](https://github.com/emdzej/openmm/blob/main/docs/re/porting.md)).
+
+The championship run found the one difference that was the port's. The port treats the CPU as instant and
+lets only the timer and the screen's retrace pace the game, as the original's loops do. But two things
+the original does take time on a real PC without waiting for anything: a fade writes the whole palette
+to the VGA card for every step, and the champion's screen redraws its slide in every turn. In the port
+both ran in no time, so the pictures that followed came early. They now spend the time a PC of the day
+needs, counted on the machine's own clock, and the whole run lines up
+([architecture.md](https://github.com/emdzej/openmm/blob/main/docs/re/architecture.md)).
 
 ### Unpacking the program the way it unpacks itself
 
